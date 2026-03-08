@@ -19,7 +19,7 @@ const prisma = new PrismaClient({ adapter });
 
 async function main() {
   const passwordHash = await hash(
-    process.env.ADMIN_PASSWORD ?? "InkAdmin2026!",
+    process.env.ADMIN_PASSWORD ?? "admin123",
     10,
   );
 
@@ -28,12 +28,12 @@ async function main() {
       email: process.env.ADMIN_EMAIL ?? "admin@ink-company.com",
     },
     update: {
-      name: "Demo Admin",
+      name: "Administrator",
       role: "SUPER_ADMIN",
       passwordHash,
     },
     create: {
-      name: "Demo Admin",
+      name: "Administrator",
       email: process.env.ADMIN_EMAIL ?? "admin@ink-company.com",
       role: "SUPER_ADMIN",
       passwordHash,

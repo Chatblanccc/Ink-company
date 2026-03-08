@@ -43,6 +43,11 @@ export type Product = Prisma.ProductModel
  */
 export type Article = Prisma.ArticleModel
 /**
+ * Model HomepageContent
+ * 
+ */
+export type HomepageContent = Prisma.HomepageContentModel
+/**
  * Model Inquiry
  * 
  */

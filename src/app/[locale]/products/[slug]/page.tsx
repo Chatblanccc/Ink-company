@@ -5,8 +5,9 @@ import { ArrowLeft } from "lucide-react";
 
 import { ProductDetailTabs } from "@/components/product-detail-tabs";
 import { getLocaleFromString } from "@/lib/i18n";
+import { getPrismaClient } from "@/lib/prisma";
 import { buildMetadata } from "@/lib/seo";
-import { products, t } from "@/lib/demo-data";
+import { type Product, products as fallbackProducts, t } from "@/lib/demo-data";
 
 /* ─── Per-product hero images ───────────────────────────────────────── */
 
@@ -23,14 +24,54 @@ const heroImages: Record<string, string> = {
 
 /* ─── Static params ─────────────────────────────────────────────────── */
 
-export function generateStaticParams() {
-  return products.flatMap((p) => [
-    { locale: "zh", slug: p.slug },
-    { locale: "en", slug: p.slug },
+export async function generateStaticParams() {
+  const prisma = getPrismaClient();
+  let slugs: string[] = fallbackProducts.map((p) => p.slug);
+  if (prisma) {
+    try {
+      const rows = await prisma.product.findMany({ select: { slug: true } });
+      if (rows.length > 0) slugs = rows.map((r) => r.slug);
+    } catch {
+      // use fallback
+    }
+  }
+  return slugs.flatMap((slug) => [
+    { locale: "zh", slug },
+    { locale: "en", slug },
   ]);
 }
 
 /* ─── Metadata ──────────────────────────────────────────────────────── */
+
+async function fetchProduct(slug: string) {
+  const prisma = getPrismaClient();
+  if (prisma) {
+    try {
+      const row = await prisma.product.findUnique({
+        where: { slug },
+        include: { category: true },
+      });
+      if (row) {
+        return {
+          slug: row.slug,
+          category: row.category?.name as Record<string, string>,
+          title: row.title as Record<string, string>,
+          summary: row.summary as Record<string, string>,
+          heroTag: row.heroTag as Record<string, string>,
+          seoTitle: row.seoTitle as Record<string, string>,
+          seoDescription: row.seoDescription as Record<string, string>,
+          applications: row.applications as Record<string, string>[],
+          features: row.features as Record<string, string>[],
+          specifications: row.specifications as { label: Record<string, string>; value: Record<string, string> }[],
+          featured: row.featured,
+        };
+      }
+    } catch {
+      // fall through
+    }
+  }
+  return fallbackProducts.find((p) => p.slug === slug) ?? null;
+}
 
 export async function generateMetadata({
   params,
@@ -39,13 +80,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, slug } = await params;
   const safeLocale = getLocaleFromString(locale);
-  const product = products.find((p) => p.slug === slug);
+  const product = await fetchProduct(slug);
   if (!product) return {};
   return buildMetadata({
     locale: safeLocale,
     pathname: `/products/${slug}`,
-    title: t(product.seoTitle, safeLocale),
-    description: t(product.seoDescription, safeLocale),
+    title: t(product.seoTitle as Record<"zh" | "en", string>, safeLocale),
+    description: t(product.seoDescription as Record<"zh" | "en", string>, safeLocale),
   });
 }
 
@@ -59,7 +100,7 @@ export default async function ProductDetailPage({
   const { locale, slug } = await params;
   const c = getLocaleFromString(locale);
 
-  const product = products.find((p) => p.slug === slug);
+  const product = await fetchProduct(slug);
   if (!product) notFound();
 
   const img = heroImages[product.slug] ?? heroImages["water-based-flexo-ink"];
@@ -186,7 +227,7 @@ export default async function ProductDetailPage({
             <div className="w-full border-t border-[#DDDBD8]" />
 
             {/* Interactive tabs: Description / Specifications / Sampling */}
-            <ProductDetailTabs product={product} locale={c} />
+            <ProductDetailTabs product={product as unknown as Product} locale={c} />
 
           </div>
         </div>
@@ -199,7 +240,7 @@ export default async function ProductDetailPage({
             {c === "zh" ? "其他产品" : "More products"}
           </p>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-[12px] lg:gap-[16px]">
-            {products
+            {fallbackProducts
               .filter((p) => p.slug !== product.slug)
               .slice(0, 4)
               .map((p) => (

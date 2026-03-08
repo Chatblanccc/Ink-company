@@ -1,5 +1,9 @@
+import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-export default function AdminIndexPage() {
-  redirect("/admin/dashboard");
+import { authOptions } from "@/lib/auth";
+
+export default async function AdminIndexPage() {
+  const session = await getServerSession(authOptions);
+  redirect(session?.user ? "/admin/dashboard" : "/admin/sign-in");
 }

@@ -7,9 +7,10 @@ import { getPrismaClient } from "@/lib/prisma";
 
 const fallbackAdmin = {
   id: "demo-admin",
-  name: "Demo Admin",
+  account: process.env.ADMIN_ACCOUNT ?? "admin",
+  name: "Administrator",
   email: process.env.ADMIN_EMAIL ?? "admin@ink-company.com",
-  password: process.env.ADMIN_PASSWORD ?? "InkAdmin2026!",
+  password: process.env.ADMIN_PASSWORD ?? "admin123",
   role: "SUPER_ADMIN",
 } as const;
 
@@ -24,7 +25,7 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
+        account: { label: "Account", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -34,13 +35,18 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const { email, password } = parsed.data;
+        const { account, password } = parsed.data;
+        const normalizedAccount = account.trim();
+        const lookupEmail =
+          normalizedAccount === fallbackAdmin.account || normalizedAccount === fallbackAdmin.email
+            ? fallbackAdmin.email
+            : normalizedAccount;
         const prisma = getPrismaClient();
 
         if (prisma) {
           try {
             const user = await prisma.user.findUnique({
-              where: { email },
+              where: { email: lookupEmail },
             });
 
             if (user?.passwordHash) {
@@ -61,7 +67,8 @@ export const authOptions: NextAuthOptions = {
         }
 
         if (
-          email === fallbackAdmin.email &&
+          (normalizedAccount === fallbackAdmin.account ||
+            normalizedAccount === fallbackAdmin.email) &&
           password === fallbackAdmin.password
         ) {
           return {

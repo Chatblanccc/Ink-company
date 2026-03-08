@@ -29,7 +29,7 @@ export function SiteFooter({ locale }: SiteFooterProps) {
         { href: `/${c}/about`, label: { zh: "关于我们", en: "About Us" } },
         { href: `/${c}/news`, label: { zh: "新闻与案例", en: "News & Cases" } },
         { href: `/${c}/contact`, label: { zh: "联系我们", en: "Contact" } },
-        { href: "/admin", label: { zh: "后台管理", en: "Admin" } },
+        { href: "/admin/sign-in", label: { zh: "后台管理", en: "Admin" } },
       ],
     },
   };

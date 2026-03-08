@@ -389,6 +389,7 @@ export const ModelName = {
   ProductCategory: 'ProductCategory',
   Product: 'Product',
   Article: 'Article',
+  HomepageContent: 'HomepageContent',
   Inquiry: 'Inquiry'
 } as const
 
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "siteSetting" | "productCategory" | "product" | "article" | "inquiry"
+    modelProps: "user" | "siteSetting" | "productCategory" | "product" | "article" | "homepageContent" | "inquiry"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -779,6 +780,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    HomepageContent: {
+      payload: Prisma.$HomepageContentPayload<ExtArgs>
+      fields: Prisma.HomepageContentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HomepageContentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomepageContentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HomepageContentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomepageContentPayload>
+        }
+        findFirst: {
+          args: Prisma.HomepageContentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomepageContentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HomepageContentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomepageContentPayload>
+        }
+        findMany: {
+          args: Prisma.HomepageContentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomepageContentPayload>[]
+        }
+        create: {
+          args: Prisma.HomepageContentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomepageContentPayload>
+        }
+        createMany: {
+          args: Prisma.HomepageContentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HomepageContentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomepageContentPayload>[]
+        }
+        delete: {
+          args: Prisma.HomepageContentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomepageContentPayload>
+        }
+        update: {
+          args: Prisma.HomepageContentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomepageContentPayload>
+        }
+        deleteMany: {
+          args: Prisma.HomepageContentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HomepageContentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HomepageContentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomepageContentPayload>[]
+        }
+        upsert: {
+          args: Prisma.HomepageContentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomepageContentPayload>
+        }
+        aggregate: {
+          args: Prisma.HomepageContentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHomepageContent>
+        }
+        groupBy: {
+          args: Prisma.HomepageContentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HomepageContentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HomepageContentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HomepageContentCountAggregateOutputType> | number
+        }
+      }
+    }
     Inquiry: {
       payload: Prisma.$InquiryPayload<ExtArgs>
       fields: Prisma.InquiryFieldRefs
@@ -972,6 +1047,23 @@ export const ArticleScalarFieldEnum = {
 } as const
 
 export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
+
+
+export const HomepageContentScalarFieldEnum = {
+  id: 'id',
+  hero: 'hero',
+  device: 'device',
+  benefits: 'benefits',
+  bigPicture: 'bigPicture',
+  specs: 'specs',
+  testimonial: 'testimonial',
+  howTo: 'howTo',
+  cta: 'cta',
+  images: 'images',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HomepageContentScalarFieldEnum = (typeof HomepageContentScalarFieldEnum)[keyof typeof HomepageContentScalarFieldEnum]
 
 
 export const InquiryScalarFieldEnum = {
@@ -1264,6 +1356,7 @@ export type GlobalOmitConfig = {
   productCategory?: Prisma.ProductCategoryOmit
   product?: Prisma.ProductOmit
   article?: Prisma.ArticleOmit
+  homepageContent?: Prisma.HomepageContentOmit
   inquiry?: Prisma.InquiryOmit
 }
 

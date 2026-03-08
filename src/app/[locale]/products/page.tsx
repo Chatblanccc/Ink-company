@@ -4,8 +4,9 @@ import { Clock, FlaskConical, Globe, ShieldCheck } from "lucide-react";
 
 import { FadeIn, FadeInGroup } from "@/components/fade-in";
 import { getLocaleFromString } from "@/lib/i18n";
+import { getPrismaClient } from "@/lib/prisma";
 import { buildMetadata } from "@/lib/seo";
-import { products } from "@/lib/demo-data";
+import { products as fallbackProducts } from "@/lib/demo-data";
 
 type L = { zh: string; en: string };
 
@@ -151,6 +152,35 @@ export default async function ProductsPage({
 }) {
   const { locale } = await params;
   const c = getLocaleFromString(locale);
+
+  const prisma = getPrismaClient();
+  type ProductRow = {
+    slug: string;
+    title: Record<string, string>;
+    summary: Record<string, string>;
+    category: Record<string, string>;
+    featured: boolean;
+  };
+  let products: ProductRow[] = fallbackProducts as unknown as ProductRow[];
+  if (prisma) {
+    try {
+      const rows = await prisma.product.findMany({
+        include: { category: true },
+        orderBy: { createdAt: "asc" },
+      });
+      if (rows.length > 0) {
+        products = rows.map((p) => ({
+          slug: p.slug,
+          title: p.title as Record<string, string>,
+          summary: p.summary as Record<string, string>,
+          category: (p.category?.name ?? {}) as Record<string, string>,
+          featured: p.featured,
+        }));
+      }
+    } catch {
+      // fall through to demo data
+    }
+  }
 
   return (
     <main className="bg-white overflow-hidden min-h-screen">

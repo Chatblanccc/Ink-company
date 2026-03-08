@@ -34,8 +34,16 @@ export function ContactForm({ locale }: ContactFormProps) {
   });
 
   const onSubmit = async (values: InquiryFormValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 700));
-    console.log("Lead captured", values);
+    const res = await fetch("/api/inquiries", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...values, language: locale }),
+    });
+
+    if (!res.ok) {
+      return;
+    }
+
     setSubmitted(true);
     reset();
     setTimeout(() => setSubmitted(false), 5000);

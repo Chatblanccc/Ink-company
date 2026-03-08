@@ -97,6 +97,20 @@ model Article {
   updatedAt      DateTime    @updatedAt
 }
 
+model HomepageContent {
+  id          String   @id @default("home")
+  hero        Json
+  device      Json?
+  benefits    Json
+  bigPicture  Json
+  specs       Json
+  testimonial Json
+  howTo       Json
+  cta         Json
+  images      Json
+  updatedAt   DateTime @updatedAt
+}
+
 model Inquiry {
   id        String        @id @default(cuid())
   name      String

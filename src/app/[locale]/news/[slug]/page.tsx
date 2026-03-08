@@ -5,8 +5,9 @@ import { ArrowLeft, Clock, Calendar, Share2, ArrowUpRight } from "lucide-react";
 
 import { FadeIn, FadeInGroup } from "@/components/fade-in";
 import { getLocaleFromString, type Locale } from "@/lib/i18n";
+import { getPrismaClient } from "@/lib/prisma";
 import { buildMetadata } from "@/lib/seo";
-import { articles } from "@/lib/demo-data";
+import { articles as fallbackArticles } from "@/lib/demo-data";
 
 /* ─── Hero images per slug ─────────────────────────────────────────── */
 const HERO_IMAGES: Record<string, string> = {
@@ -275,10 +276,80 @@ type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
 
+type ArticleData = {
+  slug: string;
+  category: Record<string, string>;
+  title: Record<string, string>;
+  excerpt: Record<string, string>;
+  content: Record<string, string>;
+  seoTitle: Record<string, string>;
+  seoDescription: Record<string, string>;
+  publishedAt: string;
+  readTime: number;
+  featured: boolean;
+};
+
+async function fetchArticle(slug: string): Promise<ArticleData | null> {
+  const prisma = getPrismaClient();
+  if (prisma) {
+    try {
+      const row = await prisma.article.findUnique({ where: { slug } });
+      if (row) {
+        return {
+          slug: row.slug,
+          category: row.category as Record<string, string>,
+          title: row.title as Record<string, string>,
+          excerpt: row.excerpt as Record<string, string>,
+          content: row.content as Record<string, string>,
+          seoTitle: row.seoTitle as Record<string, string>,
+          seoDescription: row.seoDescription as Record<string, string>,
+          publishedAt: row.publishedAt.toISOString().slice(0, 10),
+          readTime: 5,
+          featured: row.featured,
+        };
+      }
+    } catch {
+      // fall through
+    }
+  }
+  const fb = fallbackArticles.find((a) => a.slug === slug);
+  return fb ?? null;
+}
+
+async function fetchRelatedArticles(excludeSlug: string): Promise<ArticleData[]> {
+  const prisma = getPrismaClient();
+  if (prisma) {
+    try {
+      const rows = await prisma.article.findMany({
+        where: { slug: { not: excludeSlug } },
+        orderBy: { publishedAt: "desc" },
+        take: 3,
+      });
+      if (rows.length > 0) {
+        return rows.map((row) => ({
+          slug: row.slug,
+          category: row.category as Record<string, string>,
+          title: row.title as Record<string, string>,
+          excerpt: row.excerpt as Record<string, string>,
+          content: row.content as Record<string, string>,
+          seoTitle: row.seoTitle as Record<string, string>,
+          seoDescription: row.seoDescription as Record<string, string>,
+          publishedAt: row.publishedAt.toISOString().slice(0, 10),
+          readTime: 5,
+          featured: row.featured,
+        }));
+      }
+    } catch {
+      // fall through
+    }
+  }
+  return fallbackArticles.filter((a) => a.slug !== excludeSlug).slice(0, 3);
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale: localeStr, slug } = await params;
   const locale = getLocaleFromString(localeStr);
-  const article = articles.find((a) => a.slug === slug);
+  const article = await fetchArticle(slug);
   if (!article) return {};
   return buildMetadata({
     locale,
@@ -289,10 +360,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
+  const prisma = getPrismaClient();
+  let slugs: string[] = fallbackArticles.map((a) => a.slug);
+  if (prisma) {
+    try {
+      const rows = await prisma.article.findMany({ select: { slug: true } });
+      if (rows.length > 0) slugs = rows.map((r) => r.slug);
+    } catch {
+      // use fallback
+    }
+  }
   const locales = ["zh", "en"];
-  return locales.flatMap((locale) =>
-    articles.map((a) => ({ locale, slug: a.slug }))
-  );
+  return locales.flatMap((locale) => slugs.map((slug) => ({ locale, slug })));
 }
 
 /* ─── Page ──────────────────────────────────────────────────────────── */
@@ -300,12 +379,12 @@ export async function generateStaticParams() {
 export default async function NewsDetailPage({ params }: PageProps) {
   const { locale: localeStr, slug } = await params;
   const locale = getLocaleFromString(localeStr) as Locale;
-  const article = articles.find((a) => a.slug === slug);
+  const article = await fetchArticle(slug);
   if (!article) notFound();
 
   const heroImage = HERO_IMAGES[slug] ?? HERO_IMAGES["how-to-stabilize-color-in-flexo-packaging"];
   const body = getArticleBody(slug);
-  const related = articles.filter((a) => a.slug !== slug).slice(0, 3);
+  const related = await fetchRelatedArticles(slug);
 
   const dateFormatted =
     locale === "zh"
