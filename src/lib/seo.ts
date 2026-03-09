@@ -4,12 +4,40 @@ import { type Article, type Product, seoDefaults, t } from "@/lib/demo-data";
 import { type Locale, locales } from "@/lib/i18n";
 import { buildAbsoluteUrl, siteConfig } from "@/lib/site-config";
 
+/* ─── Default keywords per locale ───────────────────────────────────── */
+
+const defaultKeywords: Record<Locale, string[]> = {
+  zh: [
+    "油墨", "工业油墨", "包装印刷", "标签油墨", "UV油墨", "水性油墨",
+    "柔版印刷", "凹印油墨", "功能油墨", "商业印刷", "油墨供应商",
+    "色彩管理", "印刷耗材",
+  ],
+  en: [
+    "industrial ink", "packaging ink", "label ink", "UV ink", "water-based ink",
+    "flexo ink", "gravure ink", "functional ink", "commercial printing",
+    "ink supplier", "color management", "printing consumables",
+  ],
+};
+
+/* ─── Brand name appended to page titles ────────────────────────────── */
+
+const brandSuffix: Record<Locale, string> = {
+  zh: "| 油墨公司",
+  en: "| Ink Company",
+};
+
 type MetadataInput = {
   locale: Locale;
   pathname: string;
   title?: string;
   description?: string;
   keywords?: string[];
+  /** Optional OG image URL (absolute). Falls back to the global OG image. */
+  ogImageUrl?: string;
+  /** Pass "article" for blog/news pages to set OG type correctly */
+  ogType?: "website" | "article";
+  /** ISO-8601 string — only used when ogType === "article" */
+  publishedAt?: string;
 };
 
 export function buildAlternates(pathname: string) {
@@ -35,17 +63,33 @@ export function buildMetadata({
   title,
   description,
   keywords = [],
+  ogImageUrl,
+  ogType = "website",
+  publishedAt,
 }: MetadataInput): Metadata {
-  const pageTitle = title ?? seoDefaults.title[locale];
+  const baseTitle = title ?? seoDefaults.title[locale];
+  // Append brand unless the title already contains the brand name
+  const brandStr = brandSuffix[locale];
+  const pageTitle = baseTitle.includes("油墨公司") || baseTitle.includes("Ink Company")
+    ? baseTitle
+    : `${baseTitle} ${brandStr}`;
+
   const pageDescription = description ?? seoDefaults.description[locale];
   const normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
   const localizedPath =
     normalizedPath === "/" ? `/${locale}` : `/${locale}${normalizedPath}`;
   const url = buildAbsoluteUrl(localizedPath);
 
+  const mergedKeywords = [...defaultKeywords[locale], ...keywords];
+
+  const ogImages = ogImageUrl
+    ? [{ url: ogImageUrl, width: 1200, height: 630 }]
+    : undefined;
+
   return {
     title: pageTitle,
     description: pageDescription,
+    keywords: mergedKeywords,
     alternates: {
       canonical: url,
       languages: Object.fromEntries(
@@ -73,14 +117,18 @@ export function buildMetadata({
       url,
       siteName: siteConfig.name,
       locale,
-      type: "website",
+      type: ogType,
+      ...(ogImages && { images: ogImages }),
+      ...(ogType === "article" && publishedAt
+        ? { publishedTime: publishedAt }
+        : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: pageTitle,
       description: pageDescription,
+      ...(ogImageUrl && { images: [ogImageUrl] }),
     },
-    keywords,
   };
 }
 

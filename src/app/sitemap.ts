@@ -1,16 +1,44 @@
 import type { MetadataRoute } from "next";
 
-import { articles, products } from "@/lib/demo-data";
 import { locales } from "@/lib/i18n";
+import { getPrismaClient } from "@/lib/prisma";
 import { buildAbsoluteUrl } from "@/lib/site-config";
+import { products as fallbackProducts, articles as fallbackArticles } from "@/lib/demo-data";
 
 const staticRoutes = ["", "/products", "/news", "/about", "/contact"];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const prisma = getPrismaClient();
+
+  // Fetch real slugs from DB, fall back to demo data if unavailable
+  let productSlugs: string[] = fallbackProducts.map((p) => p.slug);
+  let articleEntries: { slug: string; publishedAt: Date }[] = fallbackArticles.map((a) => ({
+    slug: a.slug,
+    publishedAt: new Date(a.publishedAt),
+  }));
+
+  if (prisma) {
+    try {
+      const [dbProducts, dbArticles] = await Promise.all([
+        prisma.product.findMany({ select: { slug: true } }),
+        prisma.article.findMany({ select: { slug: true, publishedAt: true } }),
+      ]);
+      if (dbProducts.length > 0) productSlugs = dbProducts.map((p) => p.slug);
+      if (dbArticles.length > 0) articleEntries = dbArticles.map((a) => ({
+        slug: a.slug,
+        publishedAt: a.publishedAt,
+      }));
+    } catch {
+      // fall back to demo data
+    }
+  }
+
   const localizedStaticRoutes = locales.flatMap((locale) =>
     staticRoutes.map((route) => ({
       url: buildAbsoluteUrl(route ? `/${locale}${route}` : `/${locale}`),
       lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: route === "" ? 1.0 : 0.8,
       alternates: {
         languages: {
           zh: buildAbsoluteUrl(route ? `/zh${route}` : "/zh"),
@@ -21,26 +49,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
   );
 
   const productRoutes = locales.flatMap((locale) =>
-    products.map((product) => ({
-      url: buildAbsoluteUrl(`/${locale}/products/${product.slug}`),
+    productSlugs.map((slug) => ({
+      url: buildAbsoluteUrl(`/${locale}/products/${slug}`),
       lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
       alternates: {
         languages: {
-          zh: buildAbsoluteUrl(`/zh/products/${product.slug}`),
-          en: buildAbsoluteUrl(`/en/products/${product.slug}`),
+          zh: buildAbsoluteUrl(`/zh/products/${slug}`),
+          en: buildAbsoluteUrl(`/en/products/${slug}`),
         },
       },
     })),
   );
 
   const articleRoutes = locales.flatMap((locale) =>
-    articles.map((article) => ({
-      url: buildAbsoluteUrl(`/${locale}/news/${article.slug}`),
-      lastModified: new Date(article.publishedAt),
+    articleEntries.map(({ slug, publishedAt }) => ({
+      url: buildAbsoluteUrl(`/${locale}/news/${slug}`),
+      lastModified: publishedAt,
+      changeFrequency: "yearly" as const,
+      priority: 0.6,
       alternates: {
         languages: {
-          zh: buildAbsoluteUrl(`/zh/news/${article.slug}`),
-          en: buildAbsoluteUrl(`/en/news/${article.slug}`),
+          zh: buildAbsoluteUrl(`/zh/news/${slug}`),
+          en: buildAbsoluteUrl(`/en/news/${slug}`),
         },
       },
     })),

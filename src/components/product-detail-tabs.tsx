@@ -31,9 +31,11 @@ const SAMPLING_STEPS: Record<Locale, string[]> = {
 export function ProductDetailTabs({
   product,
   locale,
+  samplingSteps,
 }: {
   product: Product;
   locale: Locale;
+  samplingSteps?: { zh: string; en: string }[] | null;
 }) {
   const [active, setActive] = useState<Tab>("description");
 
@@ -107,7 +109,10 @@ export function ProductDetailTabs({
               : "We offer 72-hour on-press proof sampling. Here's how the process works:"}
           </p>
           <ol className="flex flex-col gap-[12px]">
-            {SAMPLING_STEPS[locale].map((step, i) => (
+            {(samplingSteps?.length
+              ? samplingSteps.map((s) => s[locale])
+              : SAMPLING_STEPS[locale]
+            ).map((step, i) => (
               <li key={i} className="flex items-start gap-[12px]">
                 <span className="shrink-0 font-bold text-[11px] text-[#485C11] bg-[#DFECC6] rounded-full w-[20px] h-[20px] flex items-center justify-center mt-[1px]">
                   {String(i + 1).padStart(2, "0")}

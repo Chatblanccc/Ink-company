@@ -64,6 +64,8 @@ async function fetchProduct(slug: string) {
           features: row.features as Record<string, string>[],
           specifications: row.specifications as { label: Record<string, string>; value: Record<string, string> }[],
           featured: row.featured,
+          coverImage: row.coverImage ?? null,
+          samplingSteps: (row.samplingSteps as { zh: string; en: string }[] | null) ?? null,
         };
       }
     } catch {
@@ -82,11 +84,15 @@ export async function generateMetadata({
   const safeLocale = getLocaleFromString(locale);
   const product = await fetchProduct(slug);
   if (!product) return {};
+  const ogImage = heroImages[slug] ?? heroImages["water-based-flexo-ink"];
+  const categoryName = t(product.category as Record<"zh" | "en", string>, safeLocale);
   return buildMetadata({
     locale: safeLocale,
     pathname: `/products/${slug}`,
     title: t(product.seoTitle as Record<"zh" | "en", string>, safeLocale),
     description: t(product.seoDescription as Record<"zh" | "en", string>, safeLocale),
+    ogImageUrl: ogImage,
+    keywords: [categoryName, slug.replace(/-/g, " ")],
   });
 }
 
@@ -103,7 +109,10 @@ export default async function ProductDetailPage({
   const product = await fetchProduct(slug);
   if (!product) notFound();
 
-  const img = heroImages[product.slug] ?? heroImages["water-based-flexo-ink"];
+  const img =
+    (product as { coverImage?: string | null }).coverImage ??
+    heroImages[product.slug] ??
+    heroImages["water-based-flexo-ink"];
 
   return (
     <main className="bg-[#F5F4F2] min-h-screen">
@@ -227,7 +236,11 @@ export default async function ProductDetailPage({
             <div className="w-full border-t border-[#DDDBD8]" />
 
             {/* Interactive tabs: Description / Specifications / Sampling */}
-            <ProductDetailTabs product={product as unknown as Product} locale={c} />
+            <ProductDetailTabs
+              product={product as unknown as Product}
+              locale={c}
+              samplingSteps={(product as { samplingSteps?: { zh: string; en: string }[] | null }).samplingSteps ?? null}
+            />
 
           </div>
         </div>

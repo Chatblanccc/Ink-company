@@ -388,6 +388,7 @@ export const ModelName = {
   SiteSetting: 'SiteSetting',
   ProductCategory: 'ProductCategory',
   Product: 'Product',
+  ProductsPageContent: 'ProductsPageContent',
   Article: 'Article',
   HomepageContent: 'HomepageContent',
   Inquiry: 'Inquiry'
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "siteSetting" | "productCategory" | "product" | "article" | "homepageContent" | "inquiry"
+    modelProps: "user" | "siteSetting" | "productCategory" | "product" | "productsPageContent" | "article" | "homepageContent" | "inquiry"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +704,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ProductCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ProductCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProductsPageContent: {
+      payload: Prisma.$ProductsPageContentPayload<ExtArgs>
+      fields: Prisma.ProductsPageContentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProductsPageContentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductsPageContentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProductsPageContentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductsPageContentPayload>
+        }
+        findFirst: {
+          args: Prisma.ProductsPageContentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductsPageContentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProductsPageContentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductsPageContentPayload>
+        }
+        findMany: {
+          args: Prisma.ProductsPageContentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductsPageContentPayload>[]
+        }
+        create: {
+          args: Prisma.ProductsPageContentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductsPageContentPayload>
+        }
+        createMany: {
+          args: Prisma.ProductsPageContentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProductsPageContentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductsPageContentPayload>[]
+        }
+        delete: {
+          args: Prisma.ProductsPageContentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductsPageContentPayload>
+        }
+        update: {
+          args: Prisma.ProductsPageContentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductsPageContentPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProductsPageContentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProductsPageContentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProductsPageContentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductsPageContentPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProductsPageContentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductsPageContentPayload>
+        }
+        aggregate: {
+          args: Prisma.ProductsPageContentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProductsPageContent>
+        }
+        groupBy: {
+          args: Prisma.ProductsPageContentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductsPageContentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProductsPageContentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductsPageContentCountAggregateOutputType> | number
         }
       }
     }
@@ -1023,11 +1098,28 @@ export const ProductScalarFieldEnum = {
   features: 'features',
   specifications: 'specifications',
   featured: 'featured',
+  coverImage: 'coverImage',
+  samplingSteps: 'samplingSteps',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const ProductsPageContentScalarFieldEnum = {
+  id: 'id',
+  hero: 'hero',
+  categories: 'categories',
+  productLines: 'productLines',
+  banner: 'banner',
+  testimonial: 'testimonial',
+  editorialPanels: 'editorialPanels',
+  promises: 'promises',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductsPageContentScalarFieldEnum = (typeof ProductsPageContentScalarFieldEnum)[keyof typeof ProductsPageContentScalarFieldEnum]
 
 
 export const ArticleScalarFieldEnum = {
@@ -1355,6 +1447,7 @@ export type GlobalOmitConfig = {
   siteSetting?: Prisma.SiteSettingOmit
   productCategory?: Prisma.ProductCategoryOmit
   product?: Prisma.ProductOmit
+  productsPageContent?: Prisma.ProductsPageContentOmit
   article?: Prisma.ArticleOmit
   homepageContent?: Prisma.HomepageContentOmit
   inquiry?: Prisma.InquiryOmit

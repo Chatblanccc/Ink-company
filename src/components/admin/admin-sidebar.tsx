@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BarChart3, FileText, Home, LayoutTemplate, Package2, ShieldCheck, Users2 } from "lucide-react";
+import { BarChart3, FileText, Home, Images, LayoutTemplate, Package2, ShieldCheck, Users2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { type AdminLocale, getAdminT } from "@/lib/admin-i18n";
@@ -15,13 +15,14 @@ export function AdminSidebar({ locale }: Props) {
   const t = getAdminT(locale);
 
   const links = [
-    { href: "/admin/dashboard", label: t.navDashboard, icon: BarChart3 },
-    { href: "/admin/homepage", label: t.navHomepage, icon: Home },
-    { href: "/admin/cms", label: t.navCms, icon: LayoutTemplate },
-    { href: "/admin/products", label: t.navProducts, icon: Package2 },
-    { href: "/admin/articles", label: t.navArticles, icon: FileText },
-    { href: "/admin/inquiries", label: t.navInquiries, icon: Users2 },
-    { href: "/admin/users", label: t.navUsers, icon: ShieldCheck },
+    { href: "/admin/dashboard",      label: t.navDashboard,     icon: BarChart3 },
+    { href: "/admin/homepage",       label: t.navHomepage,      icon: Home },
+    { href: "/admin/products-page",  label: t.navProductsPage,  icon: Images },
+    { href: "/admin/cms",            label: t.navCms,           icon: LayoutTemplate },
+    { href: "/admin/products",       label: t.navProducts,      icon: Package2 },
+    { href: "/admin/articles",       label: t.navArticles,      icon: FileText },
+    { href: "/admin/inquiries",      label: t.navInquiries,     icon: Users2 },
+    { href: "/admin/users",          label: t.navUsers,         icon: ShieldCheck },
   ];
 
   return (
@@ -42,7 +43,7 @@ export function AdminSidebar({ locale }: Props) {
         <nav className="space-y-2">
           {links.map((link) => {
             const Icon = link.icon;
-            const active = pathname === link.href;
+            const active = pathname === link.href || pathname.startsWith(link.href + "/");
 
             return (
               <Link

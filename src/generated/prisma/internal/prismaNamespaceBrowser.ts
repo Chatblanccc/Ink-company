@@ -55,6 +55,7 @@ export const ModelName = {
   SiteSetting: 'SiteSetting',
   ProductCategory: 'ProductCategory',
   Product: 'Product',
+  ProductsPageContent: 'ProductsPageContent',
   Article: 'Article',
   HomepageContent: 'HomepageContent',
   Inquiry: 'Inquiry'
@@ -132,11 +133,28 @@ export const ProductScalarFieldEnum = {
   features: 'features',
   specifications: 'specifications',
   featured: 'featured',
+  coverImage: 'coverImage',
+  samplingSteps: 'samplingSteps',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const ProductsPageContentScalarFieldEnum = {
+  id: 'id',
+  hero: 'hero',
+  categories: 'categories',
+  productLines: 'productLines',
+  banner: 'banner',
+  testimonial: 'testimonial',
+  editorialPanels: 'editorialPanels',
+  promises: 'promises',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductsPageContentScalarFieldEnum = (typeof ProductsPageContentScalarFieldEnum)[keyof typeof ProductsPageContentScalarFieldEnum]
 
 
 export const ArticleScalarFieldEnum = {

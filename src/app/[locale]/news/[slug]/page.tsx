@@ -351,11 +351,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = getLocaleFromString(localeStr);
   const article = await fetchArticle(slug);
   if (!article) return {};
+  const ogImage = HERO_IMAGES[slug] ?? HERO_IMAGES["how-to-stabilize-color-in-flexo-packaging"];
+  const categoryName = article.category[locale];
   return buildMetadata({
     locale,
     pathname: `/news/${slug}`,
     title: article.seoTitle[locale],
     description: article.seoDescription[locale],
+    ogImageUrl: ogImage,
+    ogType: "article",
+    publishedAt: article.publishedAt,
+    keywords: [categoryName],
   });
 }
 

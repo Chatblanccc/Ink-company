@@ -62,6 +62,11 @@ export type ProductCategory = Prisma.ProductCategoryModel
  */
 export type Product = Prisma.ProductModel
 /**
+ * Model ProductsPageContent
+ * 
+ */
+export type ProductsPageContent = Prisma.ProductsPageContentModel
+/**
  * Model Article
  * 
  */

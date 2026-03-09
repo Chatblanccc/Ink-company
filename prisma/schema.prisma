@@ -76,9 +76,23 @@ model Product {
   features       Json
   specifications Json
   featured       Boolean         @default(false)
+  coverImage     String?
+  samplingSteps  Json?
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   category       ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+model ProductsPageContent {
+  id              String   @id @default("products-page")
+  hero            Json
+  categories      Json
+  productLines    Json
+  banner          Json
+  testimonial     Json
+  editorialPanels Json
+  promises        Json
+  updatedAt       DateTime @updatedAt
 }
 
 model Article {
