@@ -100,6 +100,7 @@ export const SiteSettingScalarFieldEnum = {
   defaultSeoDescription: 'defaultSeoDescription',
   heroTitle: 'heroTitle',
   heroDescription: 'heroDescription',
+  productScenarioTags: 'productScenarioTags',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -133,6 +134,7 @@ export const ProductScalarFieldEnum = {
   features: 'features',
   specifications: 'specifications',
   featured: 'featured',
+  scenarioTags: 'scenarioTags',
   coverImage: 'coverImage',
   samplingSteps: 'samplingSteps',
   createdAt: 'createdAt',

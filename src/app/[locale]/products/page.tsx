@@ -101,7 +101,19 @@ export default async function ProductsPage({
     } catch { /* fall through */ }
   }
 
-  const { hero, categories, productLines, banner, testimonial, editorialPanels, promises } = cms;
+  const { hero, productLines, banner, testimonial, editorialPanels, promises } = cms;
+  // Force all category tiles to link to the all-products page with scenario pre-filter
+  const scenarioMap: Record<string, string> = {
+    "包装印刷": "packaging", "Packaging": "packaging",
+    "标签印刷": "labels",    "Labels": "labels",
+    "出版印刷": "publishing","Publishing": "publishing",
+    "工业应用": "industrial","Industrial": "industrial",
+    "特种功能": "specialty", "Specialty": "specialty",
+  };
+  const categories = cms.categories.map((cat) => {
+    const key = scenarioMap[cat.labelZh] ?? scenarioMap[cat.labelEn];
+    return { ...cat, href: key ? `/products/all?scenario=${key}` : "/products/all" };
+  });
 
   /* ── Default product images (fallback when no coverImage in DB) */
   const defaultProductImages: Record<string, string> = {
@@ -156,7 +168,7 @@ export default async function ProductsPage({
           {categories.map((cat) => (
             <Link
               key={cat.labelEn}
-              href={cat.href}
+              href={cat.href.startsWith("/") ? `/${c}${cat.href}` : cat.href}
               className="group flex flex-col items-center gap-[10px] lg:gap-[12px]"
             >
               <div className="relative w-full aspect-[3/4] rounded-[10px] lg:rounded-[12px] overflow-hidden bg-[#F3F3F3]">
@@ -224,13 +236,13 @@ export default async function ProductsPage({
       </section>
 
       {/* ── 5. Featured products grid ────────────────────────────────── */}
-      <section className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-0 py-[60px] lg:py-[80px]">
+      {products.some((p) => p.featured) && <section className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-0 py-[60px] lg:py-[80px]">
         <FadeIn className="flex items-end justify-between mb-[28px] lg:mb-[36px]">
           <h2 className="font-display text-[32px] sm:text-[44px] lg:text-[56px] leading-[0.88] tracking-[-0.04em] text-[#000]">
             {c === "zh" ? "精选产品" : "Featured Products"}
           </h2>
           <Link
-            href={`/${c}/contact`}
+            href={`/${c}/products/all`}
             className="hidden sm:inline-flex text-[13px] font-medium text-[#6F6F6F] underline underline-offset-2 hover:text-[#000] transition-colors shrink-0 mb-[6px]"
           >
             {c === "zh" ? "全部产品" : "View all"}
@@ -238,7 +250,7 @@ export default async function ProductsPage({
         </FadeIn>
 
         <FadeInGroup stagger={0.07} className="grid grid-cols-2 lg:grid-cols-4 gap-x-[12px] lg:gap-x-[16px] gap-y-[28px] lg:gap-y-[40px]">
-          {products.map((product) => {
+          {products.filter((p) => p.featured).map((product) => {
             const img =
               product.coverImage ??
               defaultProductImages[product.slug] ??
@@ -270,7 +282,7 @@ export default async function ProductsPage({
             );
           })}
         </FadeInGroup>
-      </section>
+      </section>}
 
       {/* ── 6. Testimonial split ─────────────────────────────────────── */}
       <section className="w-full grid grid-cols-1 lg:grid-cols-2">

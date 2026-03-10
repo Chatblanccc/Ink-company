@@ -19,14 +19,28 @@ export default async function EditProductPage({ params }: Props) {
   if (!prisma) notFound();
 
   type Category = { id: string; slug: string; name: Record<string, string> };
+  type ScenarioTag = { value: string; zh: string; en: string };
+
+  const DEFAULT_SCENARIO_TAGS: ScenarioTag[] = [
+    { value: "packaging",  zh: "包装印刷", en: "Packaging" },
+    { value: "labels",     zh: "标签印刷", en: "Labels" },
+    { value: "publishing", zh: "出版印刷", en: "Publishing" },
+    { value: "industrial", zh: "工业应用", en: "Industrial" },
+    { value: "specialty",  zh: "特种功能", en: "Specialty" },
+  ];
+
   let categories: Category[] = [];
+  let scenarioTags: ScenarioTag[] = DEFAULT_SCENARIO_TAGS;
   let initial: ProductFormData | null = null;
 
   try {
-    const [product, cats] = await Promise.all([
+    const [product, cats, settings] = await Promise.all([
       prisma.product.findUnique({ where: { id }, include: { category: true } }),
       prisma.productCategory.findMany({ orderBy: { sortOrder: "asc" } }),
+      prisma.siteSetting.findUnique({ where: { id: "site" } }),
     ]);
+    const stored = settings?.productScenarioTags as ScenarioTag[] | null;
+    if (stored?.length) scenarioTags = stored;
 
     if (!product) notFound();
 
@@ -53,6 +67,7 @@ export default async function EditProductPage({ params }: Props) {
           value: { zh: string; en: string };
         }[]) ?? [],
       featured: product.featured,
+      scenarioTags: (product.scenarioTags as string[]) ?? [],
       coverImage: product.coverImage ?? "",
       samplingSteps: (product.samplingSteps as { zh: string; en: string }[]) ?? [],
     };
@@ -85,7 +100,7 @@ export default async function EditProductPage({ params }: Props) {
       </div>
 
       {/* Form */}
-      <ProductForm initial={initial} categories={categories} locale={locale} />
+      <ProductForm initial={initial} categories={categories} availableScenarioTags={scenarioTags} locale={locale} />
     </div>
   );
 }

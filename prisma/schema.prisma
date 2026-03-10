@@ -48,6 +48,7 @@ model SiteSetting {
   defaultSeoDescription Json
   heroTitle             Json
   heroDescription       Json
+  productScenarioTags   Json     @default("[]")
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 }
@@ -76,6 +77,7 @@ model Product {
   features       Json
   specifications Json
   featured       Boolean         @default(false)
+  scenarioTags   Json            @default("[]")
   coverImage     String?
   samplingSteps  Json?
   createdAt      DateTime        @default(now())

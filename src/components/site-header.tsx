@@ -41,7 +41,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
   }
 
   const navigation = [
-    { href: `/${locale}/products`, label: locale === "zh" ? "全部产品" : "Products" },
+    { href: `/${locale}/products`, label: locale === "zh" ? "产品介绍" : "Product Introduction" },
     { href: `/${locale}/about`,    label: locale === "zh" ? "关于我们" : "About" },
     { href: `/${locale}/news`,     label: locale === "zh" ? "新闻与案例" : "News" },
     { href: `/${locale}/contact`,  label: locale === "zh" ? "联系我们" : "Contact" },

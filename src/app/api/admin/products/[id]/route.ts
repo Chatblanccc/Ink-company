@@ -17,6 +17,7 @@ const updateSchema = z.object({
   features: z.array(biLang),
   specifications: z.array(z.object({ label: biLang, value: biLang })),
   featured: z.boolean().optional().default(false),
+  scenarioTags: z.array(z.string()).optional().default([]),
   coverImage: z.string().nullable().optional(),
   samplingSteps: z.array(biLang).optional(),
 });
@@ -77,6 +78,7 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
       features: data.features,
       specifications: data.specifications,
       featured: data.featured,
+      scenarioTags: data.scenarioTags ?? [],
       coverImage: data.coverImage ?? null,
       samplingSteps: data.samplingSteps ?? [],
     },

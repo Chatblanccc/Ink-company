@@ -57,6 +57,7 @@ export type ProductCountAggregateOutputType = {
   features: number
   specifications: number
   featured: number
+  scenarioTags: number
   coverImage: number
   samplingSteps: number
   createdAt: number
@@ -98,6 +99,7 @@ export type ProductCountAggregateInputType = {
   features?: true
   specifications?: true
   featured?: true
+  scenarioTags?: true
   coverImage?: true
   samplingSteps?: true
   createdAt?: true
@@ -190,6 +192,7 @@ export type ProductGroupByOutputType = {
   features: runtime.JsonValue
   specifications: runtime.JsonValue
   featured: boolean
+  scenarioTags: runtime.JsonValue
   coverImage: string | null
   samplingSteps: runtime.JsonValue | null
   createdAt: Date
@@ -230,6 +233,7 @@ export type ProductWhereInput = {
   features?: Prisma.JsonFilter<"Product">
   specifications?: Prisma.JsonFilter<"Product">
   featured?: Prisma.BoolFilter<"Product"> | boolean
+  scenarioTags?: Prisma.JsonFilter<"Product">
   coverImage?: Prisma.StringNullableFilter<"Product"> | string | null
   samplingSteps?: Prisma.JsonNullableFilter<"Product">
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
@@ -250,6 +254,7 @@ export type ProductOrderByWithRelationInput = {
   features?: Prisma.SortOrder
   specifications?: Prisma.SortOrder
   featured?: Prisma.SortOrder
+  scenarioTags?: Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   samplingSteps?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -273,6 +278,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   features?: Prisma.JsonFilter<"Product">
   specifications?: Prisma.JsonFilter<"Product">
   featured?: Prisma.BoolFilter<"Product"> | boolean
+  scenarioTags?: Prisma.JsonFilter<"Product">
   coverImage?: Prisma.StringNullableFilter<"Product"> | string | null
   samplingSteps?: Prisma.JsonNullableFilter<"Product">
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
@@ -293,6 +299,7 @@ export type ProductOrderByWithAggregationInput = {
   features?: Prisma.SortOrder
   specifications?: Prisma.SortOrder
   featured?: Prisma.SortOrder
+  scenarioTags?: Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   samplingSteps?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -318,6 +325,7 @@ export type ProductScalarWhereWithAggregatesInput = {
   features?: Prisma.JsonWithAggregatesFilter<"Product">
   specifications?: Prisma.JsonWithAggregatesFilter<"Product">
   featured?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
+  scenarioTags?: Prisma.JsonWithAggregatesFilter<"Product">
   coverImage?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   samplingSteps?: Prisma.JsonNullableWithAggregatesFilter<"Product">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string
@@ -336,6 +344,7 @@ export type ProductCreateInput = {
   features: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -356,6 +365,7 @@ export type ProductUncheckedCreateInput = {
   features: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -374,6 +384,7 @@ export type ProductUpdateInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -394,6 +405,7 @@ export type ProductUncheckedUpdateInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -413,6 +425,7 @@ export type ProductCreateManyInput = {
   features: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -431,6 +444,7 @@ export type ProductUpdateManyMutationInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -450,6 +464,7 @@ export type ProductUncheckedUpdateManyInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -479,6 +494,7 @@ export type ProductCountOrderByAggregateInput = {
   features?: Prisma.SortOrder
   specifications?: Prisma.SortOrder
   featured?: Prisma.SortOrder
+  scenarioTags?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   samplingSteps?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -563,6 +579,7 @@ export type ProductCreateWithoutCategoryInput = {
   features: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -581,6 +598,7 @@ export type ProductUncheckedCreateWithoutCategoryInput = {
   features: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -629,6 +647,7 @@ export type ProductScalarWhereInput = {
   features?: Prisma.JsonFilter<"Product">
   specifications?: Prisma.JsonFilter<"Product">
   featured?: Prisma.BoolFilter<"Product"> | boolean
+  scenarioTags?: Prisma.JsonFilter<"Product">
   coverImage?: Prisma.StringNullableFilter<"Product"> | string | null
   samplingSteps?: Prisma.JsonNullableFilter<"Product">
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
@@ -647,6 +666,7 @@ export type ProductCreateManyCategoryInput = {
   features: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -665,6 +685,7 @@ export type ProductUpdateWithoutCategoryInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -683,6 +704,7 @@ export type ProductUncheckedUpdateWithoutCategoryInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -701,6 +723,7 @@ export type ProductUncheckedUpdateManyWithoutCategoryInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specifications?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   samplingSteps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -722,6 +745,7 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   features?: boolean
   specifications?: boolean
   featured?: boolean
+  scenarioTags?: boolean
   coverImage?: boolean
   samplingSteps?: boolean
   createdAt?: boolean
@@ -742,6 +766,7 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   features?: boolean
   specifications?: boolean
   featured?: boolean
+  scenarioTags?: boolean
   coverImage?: boolean
   samplingSteps?: boolean
   createdAt?: boolean
@@ -762,6 +787,7 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   features?: boolean
   specifications?: boolean
   featured?: boolean
+  scenarioTags?: boolean
   coverImage?: boolean
   samplingSteps?: boolean
   createdAt?: boolean
@@ -782,13 +808,14 @@ export type ProductSelectScalar = {
   features?: boolean
   specifications?: boolean
   featured?: boolean
+  scenarioTags?: boolean
   coverImage?: boolean
   samplingSteps?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "categoryId" | "title" | "summary" | "heroTag" | "seoTitle" | "seoDescription" | "applications" | "features" | "specifications" | "featured" | "coverImage" | "samplingSteps" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "categoryId" | "title" | "summary" | "heroTag" | "seoTitle" | "seoDescription" | "applications" | "features" | "specifications" | "featured" | "scenarioTags" | "coverImage" | "samplingSteps" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.ProductCategoryDefaultArgs<ExtArgs>
 }
@@ -817,6 +844,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     features: runtime.JsonValue
     specifications: runtime.JsonValue
     featured: boolean
+    scenarioTags: runtime.JsonValue
     coverImage: string | null
     samplingSteps: runtime.JsonValue | null
     createdAt: Date
@@ -1257,6 +1285,7 @@ export interface ProductFieldRefs {
   readonly features: Prisma.FieldRef<"Product", 'Json'>
   readonly specifications: Prisma.FieldRef<"Product", 'Json'>
   readonly featured: Prisma.FieldRef<"Product", 'Boolean'>
+  readonly scenarioTags: Prisma.FieldRef<"Product", 'Json'>
   readonly coverImage: Prisma.FieldRef<"Product", 'String'>
   readonly samplingSteps: Prisma.FieldRef<"Product", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Product", 'DateTime'>

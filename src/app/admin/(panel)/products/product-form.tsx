@@ -28,15 +28,19 @@ export type ProductFormData = {
   features: BiLang[];
   specifications: Spec[];
   featured: boolean;
+  scenarioTags?: string[];
   coverImage?: string;
   samplingSteps?: BiLang[];
 };
+
+type ScenarioTag = { value: string; zh: string; en: string };
 
 type Category = { id: string; slug: string; name: Record<string, string> };
 
 type Props = {
   initial?: ProductFormData;
   categories: Category[];
+  availableScenarioTags: ScenarioTag[];
   locale: "zh" | "en";
 };
 
@@ -103,7 +107,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 /* ─── Main Form ──────────────────────────────────────────────────────── */
 
-export function ProductForm({ initial, categories, locale }: Props) {
+export function ProductForm({ initial, categories, availableScenarioTags, locale }: Props) {
   const router = useRouter();
   const isEdit = Boolean(initial?.id);
 
@@ -127,6 +131,9 @@ export function ProductForm({ initial, categories, locale }: Props) {
   );
   const [specifications, setSpecifications] = useState<Spec[]>(
     initial?.specifications.length ? initial.specifications : [emptySpec()],
+  );
+  const [scenarioTags, setScenarioTags] = useState<string[]>(
+    initial?.scenarioTags ?? [],
   );
   const [coverImage, setCoverImage] = useState(initial?.coverImage ?? "");
   const [samplingSteps, setSamplingSteps] = useState<BiLang[]>(
@@ -188,6 +195,7 @@ export function ProductForm({ initial, categories, locale }: Props) {
       features,
       specifications,
       featured,
+      scenarioTags,
       coverImage: coverImage || null,
       samplingSteps,
     };
@@ -280,6 +288,40 @@ export function ProductForm({ initial, categories, locale }: Props) {
           <Label htmlFor="featured" className="cursor-pointer text-sm text-slate-700">
             {isZh ? "首页推荐产品" : "Featured on homepage"}
           </Label>
+        </div>
+
+        {/* Scenario tags */}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium text-slate-700">
+            {isZh ? "应用场景标签" : "Application scenario tags"}
+            <span className="ml-1 text-xs font-normal text-slate-400">
+              {isZh ? "（可多选，用于全部产品页筛选）" : "(multi-select, used for filtering)"}
+            </span>
+          </Label>
+          <div className="flex flex-wrap gap-2">
+            {availableScenarioTags.map((tag) => {
+              const checked = scenarioTags.includes(tag.value);
+              return (
+                <button
+                  key={tag.value}
+                  type="button"
+                  onClick={() =>
+                    setScenarioTags((prev) =>
+                      checked ? prev.filter((t) => t !== tag.value) : [...prev, tag.value],
+                    )
+                  }
+                  className={[
+                    "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                    checked
+                      ? "border-sky-600 bg-sky-50 text-sky-700"
+                      : "border-slate-200 text-slate-500 hover:border-sky-400 hover:text-sky-600",
+                  ].join(" ")}
+                >
+                  {isZh ? tag.zh : tag.en}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </section>
 

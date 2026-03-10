@@ -50,6 +50,7 @@ export type SiteSettingCountAggregateOutputType = {
   defaultSeoDescription: number
   heroTitle: number
   heroDescription: number
+  productScenarioTags: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -82,6 +83,7 @@ export type SiteSettingCountAggregateInputType = {
   defaultSeoDescription?: true
   heroTitle?: true
   heroDescription?: true
+  productScenarioTags?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -169,6 +171,7 @@ export type SiteSettingGroupByOutputType = {
   defaultSeoDescription: runtime.JsonValue
   heroTitle: runtime.JsonValue
   heroDescription: runtime.JsonValue
+  productScenarioTags: runtime.JsonValue
   createdAt: Date
   updatedAt: Date
   _count: SiteSettingCountAggregateOutputType | null
@@ -204,6 +207,7 @@ export type SiteSettingWhereInput = {
   defaultSeoDescription?: Prisma.JsonFilter<"SiteSetting">
   heroTitle?: Prisma.JsonFilter<"SiteSetting">
   heroDescription?: Prisma.JsonFilter<"SiteSetting">
+  productScenarioTags?: Prisma.JsonFilter<"SiteSetting">
   createdAt?: Prisma.DateTimeFilter<"SiteSetting"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SiteSetting"> | Date | string
 }
@@ -218,6 +222,7 @@ export type SiteSettingOrderByWithRelationInput = {
   defaultSeoDescription?: Prisma.SortOrder
   heroTitle?: Prisma.SortOrder
   heroDescription?: Prisma.SortOrder
+  productScenarioTags?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -235,6 +240,7 @@ export type SiteSettingWhereUniqueInput = Prisma.AtLeast<{
   defaultSeoDescription?: Prisma.JsonFilter<"SiteSetting">
   heroTitle?: Prisma.JsonFilter<"SiteSetting">
   heroDescription?: Prisma.JsonFilter<"SiteSetting">
+  productScenarioTags?: Prisma.JsonFilter<"SiteSetting">
   createdAt?: Prisma.DateTimeFilter<"SiteSetting"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SiteSetting"> | Date | string
 }, "id">
@@ -249,6 +255,7 @@ export type SiteSettingOrderByWithAggregationInput = {
   defaultSeoDescription?: Prisma.SortOrder
   heroTitle?: Prisma.SortOrder
   heroDescription?: Prisma.SortOrder
+  productScenarioTags?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SiteSettingCountOrderByAggregateInput
@@ -269,6 +276,7 @@ export type SiteSettingScalarWhereWithAggregatesInput = {
   defaultSeoDescription?: Prisma.JsonWithAggregatesFilter<"SiteSetting">
   heroTitle?: Prisma.JsonWithAggregatesFilter<"SiteSetting">
   heroDescription?: Prisma.JsonWithAggregatesFilter<"SiteSetting">
+  productScenarioTags?: Prisma.JsonWithAggregatesFilter<"SiteSetting">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SiteSetting"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SiteSetting"> | Date | string
 }
@@ -283,6 +291,7 @@ export type SiteSettingCreateInput = {
   defaultSeoDescription: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroTitle: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroDescription: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  productScenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -297,6 +306,7 @@ export type SiteSettingUncheckedCreateInput = {
   defaultSeoDescription: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroTitle: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroDescription: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  productScenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -311,6 +321,7 @@ export type SiteSettingUpdateInput = {
   defaultSeoDescription?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroTitle?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroDescription?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  productScenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -325,6 +336,7 @@ export type SiteSettingUncheckedUpdateInput = {
   defaultSeoDescription?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroTitle?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroDescription?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  productScenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -339,6 +351,7 @@ export type SiteSettingCreateManyInput = {
   defaultSeoDescription: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroTitle: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroDescription: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  productScenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -353,6 +366,7 @@ export type SiteSettingUpdateManyMutationInput = {
   defaultSeoDescription?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroTitle?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroDescription?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  productScenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -367,6 +381,7 @@ export type SiteSettingUncheckedUpdateManyInput = {
   defaultSeoDescription?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroTitle?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   heroDescription?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  productScenarioTags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -381,6 +396,7 @@ export type SiteSettingCountOrderByAggregateInput = {
   defaultSeoDescription?: Prisma.SortOrder
   heroTitle?: Prisma.SortOrder
   heroDescription?: Prisma.SortOrder
+  productScenarioTags?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -413,6 +429,7 @@ export type SiteSettingSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   defaultSeoDescription?: boolean
   heroTitle?: boolean
   heroDescription?: boolean
+  productScenarioTags?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["siteSetting"]>
@@ -427,6 +444,7 @@ export type SiteSettingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   defaultSeoDescription?: boolean
   heroTitle?: boolean
   heroDescription?: boolean
+  productScenarioTags?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["siteSetting"]>
@@ -441,6 +459,7 @@ export type SiteSettingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   defaultSeoDescription?: boolean
   heroTitle?: boolean
   heroDescription?: boolean
+  productScenarioTags?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["siteSetting"]>
@@ -455,11 +474,12 @@ export type SiteSettingSelectScalar = {
   defaultSeoDescription?: boolean
   heroTitle?: boolean
   heroDescription?: boolean
+  productScenarioTags?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SiteSettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyName" | "address" | "phone" | "email" | "defaultSeoTitle" | "defaultSeoDescription" | "heroTitle" | "heroDescription" | "createdAt" | "updatedAt", ExtArgs["result"]["siteSetting"]>
+export type SiteSettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyName" | "address" | "phone" | "email" | "defaultSeoTitle" | "defaultSeoDescription" | "heroTitle" | "heroDescription" | "productScenarioTags" | "createdAt" | "updatedAt", ExtArgs["result"]["siteSetting"]>
 
 export type $SiteSettingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SiteSetting"
@@ -474,6 +494,7 @@ export type $SiteSettingPayload<ExtArgs extends runtime.Types.Extensions.Interna
     defaultSeoDescription: runtime.JsonValue
     heroTitle: runtime.JsonValue
     heroDescription: runtime.JsonValue
+    productScenarioTags: runtime.JsonValue
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["siteSetting"]>
@@ -908,6 +929,7 @@ export interface SiteSettingFieldRefs {
   readonly defaultSeoDescription: Prisma.FieldRef<"SiteSetting", 'Json'>
   readonly heroTitle: Prisma.FieldRef<"SiteSetting", 'Json'>
   readonly heroDescription: Prisma.FieldRef<"SiteSetting", 'Json'>
+  readonly productScenarioTags: Prisma.FieldRef<"SiteSetting", 'Json'>
   readonly createdAt: Prisma.FieldRef<"SiteSetting", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SiteSetting", 'DateTime'>
 }

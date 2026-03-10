@@ -12,27 +12,27 @@ export const productsPageDefaults = {
     {
       labelZh: "包装印刷", labelEn: "Packaging",
       img: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=400&auto=format&fit=crop",
-      href: "#packaging",
+      href: "/products/all",
     },
     {
       labelZh: "标签印刷", labelEn: "Labels",
       img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=400&auto=format&fit=crop",
-      href: "#labels",
+      href: "/products/all",
     },
     {
       labelZh: "出版印刷", labelEn: "Publishing",
       img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&auto=format&fit=crop",
-      href: "#publishing",
+      href: "/products/all",
     },
     {
       labelZh: "工业应用", labelEn: "Industrial",
       img: "https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?q=80&w=400&auto=format&fit=crop",
-      href: "#industrial",
+      href: "/products/all",
     },
     {
       labelZh: "特种功能", labelEn: "Specialty",
       img: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?q=80&w=400&auto=format&fit=crop",
-      href: "#specialty",
+      href: "/products/all",
     },
   ],
   productLines: [
