@@ -391,6 +391,7 @@ export const ModelName = {
   ProductsPageContent: 'ProductsPageContent',
   Article: 'Article',
   HomepageContent: 'HomepageContent',
+  ArticleStats: 'ArticleStats',
   Inquiry: 'Inquiry'
 } as const
 
@@ -407,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "siteSetting" | "productCategory" | "product" | "productsPageContent" | "article" | "homepageContent" | "inquiry"
+    modelProps: "user" | "siteSetting" | "productCategory" | "product" | "productsPageContent" | "article" | "homepageContent" | "articleStats" | "inquiry"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -929,6 +930,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ArticleStats: {
+      payload: Prisma.$ArticleStatsPayload<ExtArgs>
+      fields: Prisma.ArticleStatsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ArticleStatsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticleStatsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ArticleStatsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticleStatsPayload>
+        }
+        findFirst: {
+          args: Prisma.ArticleStatsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticleStatsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ArticleStatsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticleStatsPayload>
+        }
+        findMany: {
+          args: Prisma.ArticleStatsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticleStatsPayload>[]
+        }
+        create: {
+          args: Prisma.ArticleStatsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticleStatsPayload>
+        }
+        createMany: {
+          args: Prisma.ArticleStatsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ArticleStatsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticleStatsPayload>[]
+        }
+        delete: {
+          args: Prisma.ArticleStatsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticleStatsPayload>
+        }
+        update: {
+          args: Prisma.ArticleStatsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticleStatsPayload>
+        }
+        deleteMany: {
+          args: Prisma.ArticleStatsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ArticleStatsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ArticleStatsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticleStatsPayload>[]
+        }
+        upsert: {
+          args: Prisma.ArticleStatsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticleStatsPayload>
+        }
+        aggregate: {
+          args: Prisma.ArticleStatsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateArticleStats>
+        }
+        groupBy: {
+          args: Prisma.ArticleStatsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ArticleStatsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ArticleStatsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ArticleStatsCountAggregateOutputType> | number
+        }
+      }
+    }
     Inquiry: {
       payload: Prisma.$InquiryPayload<ExtArgs>
       fields: Prisma.InquiryFieldRefs
@@ -1158,6 +1233,16 @@ export const HomepageContentScalarFieldEnum = {
 } as const
 
 export type HomepageContentScalarFieldEnum = (typeof HomepageContentScalarFieldEnum)[keyof typeof HomepageContentScalarFieldEnum]
+
+
+export const ArticleStatsScalarFieldEnum = {
+  id: 'id',
+  articleSlug: 'articleSlug',
+  totalSeconds: 'totalSeconds',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ArticleStatsScalarFieldEnum = (typeof ArticleStatsScalarFieldEnum)[keyof typeof ArticleStatsScalarFieldEnum]
 
 
 export const InquiryScalarFieldEnum = {
@@ -1452,6 +1537,7 @@ export type GlobalOmitConfig = {
   productsPageContent?: Prisma.ProductsPageContentOmit
   article?: Prisma.ArticleOmit
   homepageContent?: Prisma.HomepageContentOmit
+  articleStats?: Prisma.ArticleStatsOmit
   inquiry?: Prisma.InquiryOmit
 }
 

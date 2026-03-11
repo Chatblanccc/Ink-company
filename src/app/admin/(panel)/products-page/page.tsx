@@ -1,5 +1,3 @@
-import { LayoutTemplate } from "lucide-react";
-
 import { getAdminLocale } from "@/lib/admin-lang";
 import { getPrismaClient } from "@/lib/prisma";
 import { productsPageDefaults, type ProductsPageData } from "@/lib/products-page-defaults";
@@ -33,20 +31,6 @@ export default async function AdminProductsPageContent() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <LayoutTemplate className="size-6 text-slate-500" />
-        <div>
-          <h2 className="text-xl font-semibold text-slate-950">
-            {isZh ? "产品列表页内容管理" : "Products page content"}
-          </h2>
-          <p className="text-sm text-slate-500">
-            {isZh
-              ? "管理 /products 页面的所有板块文字与图片"
-              : "Manage all sections, copy, and images on the /products page"}
-          </p>
-        </div>
-      </div>
-
       <ProductsPageForm initial={data} locale={locale} />
     </div>
   );

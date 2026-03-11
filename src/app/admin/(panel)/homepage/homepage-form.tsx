@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -91,8 +91,15 @@ export function HomepageForm({ initialData, locale }: Props) {
   const [data, setData] = useState<HomepageData>(initialData);
   const [isPending, startTransition] = useTransition();
   const [saved, setSaved] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const isZh = locale === "zh";
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   function patch<K extends keyof HomepageData>(key: K, value: HomepageData[K]) {
     setData((prev) => ({ ...prev, [key]: value }));
@@ -117,27 +124,58 @@ export function HomepageForm({ initialData, locale }: Props) {
   return (
     <div className="space-y-8">
       {/* Sticky save bar */}
-      <div className="sticky top-0 z-10 flex items-center justify-between rounded-2xl border border-slate-200 bg-white/90 px-5 py-3 shadow-sm backdrop-blur">
-        <p className="text-sm font-medium text-slate-700">
-          {isZh ? "首页内容管理" : "Homepage Content"}
-        </p>
-        <Button
+      <div className="sticky top-[60px] z-10 flex">
+        {/* Full bar (visible when not scrolled) */}
+        <div
+          className={`flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white/90 px-5 py-3 shadow-sm backdrop-blur transition-all duration-300 ease-in-out ${
+            isScrolled ? "pointer-events-none opacity-0 scale-95" : "opacity-100 scale-100"
+          }`}
+        >
+          <p className="text-sm font-medium text-slate-700">
+            {isZh ? "首页内容管理" : "Homepage Content"}
+          </p>
+          <Button
+            onClick={handleSave}
+            disabled={isPending}
+            className={`rounded-xl px-5 py-2 text-sm font-semibold transition-colors ${
+              saved
+                ? "bg-emerald-500 hover:bg-emerald-500 text-white"
+                : "bg-slate-950 hover:bg-slate-800 text-white"
+            }`}
+          >
+            {isPending ? (
+              <><Loader2 className="mr-2 size-4 animate-spin" />{isZh ? "保存中…" : "Saving…"}</>
+            ) : saved ? (
+              <><CheckCircle2 className="mr-2 size-4" />{isZh ? "已保存 ✓" : "Saved ✓"}</>
+            ) : (
+              <><Save className="mr-2 size-4" />{isZh ? "保存更改" : "Save changes"}</>
+            )}
+          </Button>
+        </div>
+
+        {/* Collapsed pill button (visible when scrolled) */}
+        <button
           onClick={handleSave}
           disabled={isPending}
-          className={`rounded-xl px-5 py-2 text-sm font-semibold transition-all ${
+          title={isZh ? "保存更改" : "Save changes"}
+          className={`absolute right-0 top-7 flex size-11 items-center justify-center rounded-full border shadow-lg backdrop-blur transition-all duration-300 ease-in-out ${
+            isScrolled ? "pointer-events-auto opacity-100 scale-100" : "pointer-events-none opacity-0 scale-75"
+          } ${
             saved
-              ? "bg-emerald-500 hover:bg-emerald-500 text-white"
-              : "bg-slate-950 hover:bg-slate-800 text-white"
+              ? "border-emerald-200 bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
+              : isPending
+              ? "border-slate-200 bg-white/90 text-slate-400"
+              : "border-slate-200 bg-slate-950 text-white hover:bg-slate-800"
           }`}
         >
           {isPending ? (
-            <><Loader2 className="mr-2 size-4 animate-spin" />{isZh ? "保存中…" : "Saving…"}</>
+            <Loader2 className="size-4 animate-spin" />
           ) : saved ? (
-            <><CheckCircle2 className="mr-2 size-4" />{isZh ? "已保存 ✓" : "Saved ✓"}</>
+            <CheckCircle2 className="size-4" />
           ) : (
-            <><Save className="mr-2 size-4" />{isZh ? "保存更改" : "Save changes"}</>
+            <Save className="size-4" />
           )}
-        </Button>
+        </button>
       </div>
 
       {/* ── Hero ── */}

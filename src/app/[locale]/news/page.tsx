@@ -5,6 +5,8 @@ import { ArrowUpRight } from "lucide-react";
 import { FadeIn, FadeInGroup } from "@/components/fade-in";
 import { getLocaleFromString } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/seo";
+import { relativeTime } from "@/lib/relative-time";
+import { getPrismaClient } from "@/lib/prisma";
 
 type L = { zh: string; en: string };
 
@@ -14,7 +16,7 @@ const hotTopic = {
   slug: "how-to-stabilize-color-in-flexo-packaging",
   category: { zh: "技术文章", en: "Insights" },
   source: { zh: "油墨公司", en: "Ink Company" },
-  date: { zh: "2026-03-05", en: "Mar 5, 2026" },
+  publishedAt: new Date("2026-03-05T09:00:00Z"),
   title: {
     zh: "柔印包装如何稳定控制色差与批次一致性",
     en: "How to stabilize color consistency in flexo packaging",
@@ -27,79 +29,107 @@ const hotTopic = {
   img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=1600&auto=format&fit=crop",
 };
 
-/* ─── Latest News cards ─────────────────────────────────────────────── */
+/* ─── Static fallback cards (used when DB unavailable/empty) ────────── */
 
-const latestNews: {
+type CardArticle = {
   slug: string;
   category: L;
-  date: L;
+  publishedAt: Date;
   source: L;
   title: L;
   img: string;
-}[] = [
+};
+
+const SOURCE: L = { zh: "油墨公司", en: "Ink Company" };
+
+// Image pool — cycled for DB articles that have no stored image
+const FALLBACK_IMGS = [
+  "https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1523821741446-edb2b68bb7a0?q=80&w=600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1615529328331-f8917597711f?q=80&w=600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1516937941344-00b4e0337589?q=80&w=600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop",
+];
+
+// Slug → image overrides for known demo articles
+const SLUG_IMG: Record<string, string> = {
+  "uv-label-ink-selection-checklist": FALLBACK_IMGS[0],
+  "building-a-bilingual-packaging-spec-workflow": FALLBACK_IMGS[1],
+  "pantone-color-matching-for-brand-packaging": FALLBACK_IMGS[2],
+  "water-based-ink-trends-2026": FALLBACK_IMGS[3],
+  "72h-sampling-turnaround-case-study": FALLBACK_IMGS[4],
+  "reach-compliance-documentation-guide": FALLBACK_IMGS[5],
+  "ink-adhesion-testing-flexible-packaging": FALLBACK_IMGS[6],
+  "cross-plant-color-consistency": FALLBACK_IMGS[7],
+};
+
+const STATIC_LATEST_NEWS: CardArticle[] = [
   {
     slug: "uv-label-ink-selection-checklist",
     category: { zh: "案例洞察", en: "Case Study" },
-    date: { zh: "1小时前", en: "1 Hour Ago" },
-    source: { zh: "油墨公司", en: "Ink Company" },
+    publishedAt: new Date("2026-03-10T08:30:00Z"),
+    source: SOURCE,
     title: { zh: "UV 标签油墨选型清单：从附着力到后加工兼容", en: "UV label ink checklist: adhesion to finishing compatibility" },
-    img: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=600&auto=format&fit=crop",
+    img: SLUG_IMG["uv-label-ink-selection-checklist"],
   },
   {
     slug: "building-a-bilingual-packaging-spec-workflow",
     category: { zh: "新闻动态", en: "News" },
-    date: { zh: "1小时前", en: "1 Hour Ago" },
-    source: { zh: "油墨公司", en: "Ink Company" },
+    publishedAt: new Date("2026-03-08T14:00:00Z"),
+    source: SOURCE,
     title: { zh: "构建面向海外客户的双语包装规格协同流程", en: "Building a bilingual packaging spec workflow for global programs" },
-    img: "https://images.unsplash.com/photo-1523821741446-edb2b68bb7a0?q=80&w=600&auto=format&fit=crop",
+    img: SLUG_IMG["building-a-bilingual-packaging-spec-workflow"],
   },
   {
     slug: "pantone-color-matching-for-brand-packaging",
     category: { zh: "技术文章", en: "Insights" },
-    date: { zh: "1小时前", en: "1 Hour Ago" },
-    source: { zh: "油墨公司", en: "Ink Company" },
+    publishedAt: new Date("2026-03-04T10:00:00Z"),
+    source: SOURCE,
     title: { zh: "品牌包装中的 Pantone 目标色建立与量产复现方法", en: "Pantone color matching and production reproduction for brand packaging" },
-    img: "https://images.unsplash.com/photo-1615529328331-f8917597711f?q=80&w=600&auto=format&fit=crop",
+    img: SLUG_IMG["pantone-color-matching-for-brand-packaging"],
   },
   {
     slug: "water-based-ink-trends-2026",
     category: { zh: "行业动态", en: "Industry" },
-    date: { zh: "1小时前", en: "1 Hour Ago" },
-    source: { zh: "油墨公司", en: "Ink Company" },
+    publishedAt: new Date("2026-02-28T09:00:00Z"),
+    source: SOURCE,
     title: { zh: "2026 年水性油墨技术趋势：绿色合规与高性能并行", en: "Water-based ink trends 2026: green compliance meets high performance" },
-    img: "https://images.unsplash.com/photo-1516937941344-00b4e0337589?q=80&w=600&auto=format&fit=crop",
+    img: SLUG_IMG["water-based-ink-trends-2026"],
   },
   {
     slug: "72h-sampling-turnaround-case-study",
     category: { zh: "案例洞察", en: "Case Study" },
-    date: { zh: "1小时前", en: "1 Hour Ago" },
-    source: { zh: "油墨公司", en: "Ink Company" },
+    publishedAt: new Date("2026-02-15T11:00:00Z"),
+    source: SOURCE,
     title: { zh: "72 小时打样周期如何缩短 APAC 品牌的量产决策路径", en: "How 72h sampling compressed production decision cycles for an APAC brand" },
-    img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop",
+    img: SLUG_IMG["72h-sampling-turnaround-case-study"],
   },
   {
     slug: "reach-compliance-documentation-guide",
     category: { zh: "法规合规", en: "Compliance" },
-    date: { zh: "1小时前", en: "1 Hour Ago" },
-    source: { zh: "油墨公司", en: "Ink Company" },
+    publishedAt: new Date("2026-02-01T08:00:00Z"),
+    source: SOURCE,
     title: { zh: "REACH 法规合规文件准备指南：面向欧洲市场印刷采购商", en: "REACH compliance documentation guide for European print procurement" },
-    img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop",
+    img: SLUG_IMG["reach-compliance-documentation-guide"],
   },
   {
     slug: "ink-adhesion-testing-flexible-packaging",
     category: { zh: "技术文章", en: "Insights" },
-    date: { zh: "1小时前", en: "1 Hour Ago" },
-    source: { zh: "油墨公司", en: "Ink Company" },
+    publishedAt: new Date("2026-01-20T10:30:00Z"),
+    source: SOURCE,
     title: { zh: "软包装油墨附着力测试标准与实机验证方法总结", en: "Adhesion testing standards and on-press validation for flexible packaging inks" },
-    img: "https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=600&auto=format&fit=crop",
+    img: SLUG_IMG["ink-adhesion-testing-flexible-packaging"],
   },
   {
     slug: "cross-plant-color-consistency",
     category: { zh: "案例洞察", en: "Case Study" },
-    date: { zh: "1小时前", en: "1 Hour Ago" },
-    source: { zh: "油墨公司", en: "Ink Company" },
+    publishedAt: new Date("2025-12-15T09:00:00Z"),
+    source: SOURCE,
     title: { zh: "跨工厂色彩一致性管理：从配方标准化到现场首件确认", en: "Cross-plant color consistency: from formula standardization to first-article sign-off" },
-    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop",
+    img: SLUG_IMG["cross-plant-color-consistency"],
   },
 ];
 
@@ -133,6 +163,31 @@ export default async function NewsPage({
   const { locale } = await params;
   const c = getLocaleFromString(locale);
 
+  /* ── Fetch articles from DB; fall back to static if unavailable ─── */
+  let displayNews: CardArticle[] = STATIC_LATEST_NEWS;
+
+  const prisma = getPrismaClient();
+  if (prisma) {
+    try {
+      const rows = await prisma.article.findMany({
+        orderBy: { publishedAt: "desc" },
+        where: { slug: { not: hotTopic.slug } },
+      });
+      if (rows.length > 0) {
+        displayNews = rows.map((row, i) => ({
+          slug: row.slug,
+          category: row.category as L,
+          publishedAt: row.publishedAt,
+          source: SOURCE,
+          title: row.title as L,
+          img: SLUG_IMG[row.slug] ?? FALLBACK_IMGS[i % FALLBACK_IMGS.length],
+        }));
+      }
+    } catch {
+      // keep static fallback
+    }
+  }
+
   return (
     <main className="bg-white min-h-screen">
 
@@ -165,7 +220,7 @@ export default async function NewsPage({
                   {hotTopic.title[c]}
                 </h3>
                 <p className="font-mono text-[10px] lg:text-[11px] text-white/55 mt-[8px]">
-                  {hotTopic.date[c]}&nbsp;&nbsp;{hotTopic.source[c]}
+                  {relativeTime(hotTopic.publishedAt, c)}&nbsp;&nbsp;{hotTopic.source[c]}
                 </p>
               </div>
             </Link>
@@ -193,7 +248,7 @@ export default async function NewsPage({
               </div>
 
               <p className="font-mono text-[10px] lg:text-[11px] text-[#929292] tracking-[-0.01em] clearfix">
-                {hotTopic.date[c]}&nbsp;&nbsp;{hotTopic.source[c]}
+                {relativeTime(hotTopic.publishedAt, c)}&nbsp;&nbsp;{hotTopic.source[c]}
               </p>
             </div>
           </div>
@@ -215,7 +270,7 @@ export default async function NewsPage({
           stagger={0.06}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-[16px] lg:gap-x-[20px] gap-y-[36px] lg:gap-y-[48px]"
         >
-          {latestNews.map((article) => (
+          {displayNews.map((article) => (
             <Link
               key={article.slug}
               href={`/${c}/news/${article.slug}`}
@@ -235,7 +290,7 @@ export default async function NewsPage({
                   {article.title[c]}
                 </h3>
                 <p className="font-mono text-[10px] lg:text-[11px] text-[#929292] tracking-[-0.01em]">
-                  {article.date[c]}&nbsp;&nbsp;{article.source[c]}
+                  {relativeTime(article.publishedAt, c)}&nbsp;&nbsp;{article.source[c]}
                 </p>
               </div>
             </Link>
@@ -246,7 +301,7 @@ export default async function NewsPage({
         <FadeIn delay={0.2}>
           <div className="flex justify-center mt-[60px] lg:mt-[80px]">
             <Link
-              href={`/${c}/contact`}
+              href={`/${c}/news/all`}
               className="inline-flex flex-row items-center gap-[6px] py-[12px] lg:py-[14px] px-[24px] lg:px-[28px] rounded-full border border-[#000] text-[13px] lg:text-[14px] font-bold leading-[1.4] tracking-[-0.025em] text-[#000] hover:bg-[#000] hover:text-white transition-colors duration-200"
             >
               {c === "zh" ? "查看全部内容" : "View all articles"}

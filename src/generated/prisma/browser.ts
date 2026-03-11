@@ -53,6 +53,11 @@ export type Article = Prisma.ArticleModel
  */
 export type HomepageContent = Prisma.HomepageContentModel
 /**
+ * Model ArticleStats
+ * 
+ */
+export type ArticleStats = Prisma.ArticleStatsModel
+/**
  * Model Inquiry
  * 
  */

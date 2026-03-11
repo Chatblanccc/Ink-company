@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Clock, Calendar, Share2, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, Calendar, Share2, ArrowUpRight } from "lucide-react";
 
 import { FadeIn, FadeInGroup } from "@/components/fade-in";
 import { getLocaleFromString, type Locale } from "@/lib/i18n";
 import { getPrismaClient } from "@/lib/prisma";
 import { buildMetadata } from "@/lib/seo";
 import { articles as fallbackArticles } from "@/lib/demo-data";
+import { ArticleReadTracker } from "@/components/article-read-tracker";
+import { ArticleReadTimeDisplay } from "@/components/article-read-time-display";
 
 /* ─── Hero images per slug ─────────────────────────────────────────── */
 const HERO_IMAGES: Record<string, string> = {
@@ -270,6 +272,17 @@ function getArticleBody(slug: string): ArticleBody {
   return ARTICLE_BODIES[slug] ?? ARTICLE_BODIES.default;
 }
 
+async function fetchArticleStats(slug: string): Promise<number> {
+  const prisma = getPrismaClient();
+  if (!prisma) return 0;
+  try {
+    const stats = await prisma.articleStats.findUnique({ where: { articleSlug: slug } });
+    return stats?.totalSeconds ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
 /* ─── Metadata ──────────────────────────────────────────────────────── */
 
 type PageProps = {
@@ -390,7 +403,10 @@ export default async function NewsDetailPage({ params }: PageProps) {
 
   const heroImage = HERO_IMAGES[slug] ?? HERO_IMAGES["how-to-stabilize-color-in-flexo-packaging"];
   const body = getArticleBody(slug);
-  const related = await fetchRelatedArticles(slug);
+  const [related, totalSeconds] = await Promise.all([
+    fetchRelatedArticles(slug),
+    fetchArticleStats(slug),
+  ]);
 
   const dateFormatted =
     locale === "zh"
@@ -403,6 +419,9 @@ export default async function NewsDetailPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-white">
+      {/* Invisible tracker — measures real reading time and sends it to the API */}
+      <ArticleReadTracker slug={slug} />
+
       {/* ── Back link ──────────────────────────────────────────── */}
       <div className="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-0 pt-[100px] lg:pt-[120px] pb-[28px]">
         <FadeIn>
@@ -452,12 +471,11 @@ export default async function NewsDetailPage({ params }: PageProps) {
                 <Calendar size={13} strokeWidth={1.6} />
                 {dateFormatted}
               </span>
-              <span className="flex items-center gap-[6px] text-[12px] font-mono text-[#666]">
-                <Clock size={13} strokeWidth={1.6} />
-                {locale === "zh"
-                  ? `${article.readTime} 分钟阅读`
-                  : `${article.readTime} min read`}
-              </span>
+              <ArticleReadTimeDisplay
+                slug={slug}
+                initialSeconds={totalSeconds}
+                locale={locale}
+              />
               <span className="text-[12px] font-mono text-[#000] bg-[#F4F4F2] px-[10px] py-[4px] rounded-full">
                 {locale === "zh" ? "油墨公司" : "Ink Company"}
               </span>

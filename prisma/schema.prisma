@@ -127,6 +127,13 @@ model HomepageContent {
   updatedAt   DateTime @updatedAt
 }
 
+model ArticleStats {
+  id           String   @id @default(cuid())
+  articleSlug  String   @unique
+  totalSeconds Int      @default(0)
+  updatedAt    DateTime @updatedAt
+}
+
 model Inquiry {
   id        String        @id @default(cuid())
   name      String
