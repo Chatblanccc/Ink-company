@@ -76,9 +76,10 @@ export const adminDict = {
     colRole: "角色",
     accessDenied: "权限不足，仅超级管理员可访问此页面。",
 
-    // Homepage / Products page
+    // Homepage / Products page / About page
     navHomepage: "首页内容",
     navProductsPage: "产品页内容",
+    navAboutPage: "关于我们",
 
     // CMS
     cmsModulesTitle: "内容模块",
@@ -166,9 +167,10 @@ export const adminDict = {
     colRole: "Role",
     accessDenied: "Access denied. Only SUPER_ADMIN can view this page.",
 
-    // Homepage / Products page
+    // Homepage / Products page / About page
     navHomepage: "Homepage",
     navProductsPage: "Products page",
+    navAboutPage: "About page",
 
     // CMS
     cmsModulesTitle: "CMS sections",

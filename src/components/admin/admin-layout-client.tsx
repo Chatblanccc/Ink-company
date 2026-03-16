@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Bell, ExternalLink, PanelLeft, Search } from "lucide-react";
+import { ExternalLink, PanelLeft, Search } from "lucide-react";
 
 import { AdminSidebar } from "./admin-sidebar";
 import { AdminLangToggle } from "./admin-lang-toggle";
+import { NotificationBell } from "./notification-bell";
 import { type AdminLocale } from "@/lib/admin-i18n";
 
 type Props = {
@@ -21,12 +22,12 @@ export function AdminLayoutClient({ locale, userName, userRole, initials, childr
   const isZh = locale === "zh";
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#F5F6FA" }}>
+    <div className="h-screen flex overflow-hidden" style={{ background: "#F5F6FA" }}>
       {/* Sidebar */}
       <AdminSidebar locale={locale} collapsed={collapsed} />
 
-      {/* Main column */}
-      <div className="flex flex-col flex-1 min-h-screen min-w-0">
+      {/* Main column — scrolls independently, sidebar stays fixed */}
+      <div className="flex flex-col flex-1 min-w-0 overflow-y-auto">
 
         {/* ── Topbar ─────────────────────────────────────────────── */}
         <header
@@ -75,14 +76,8 @@ export function AdminLayoutClient({ locale, userName, userRole, initials, childr
             {/* Lang toggle */}
             <AdminLangToggle currentLang={locale} />
 
-            {/* Bell */}
-            <button className="relative flex items-center justify-center size-9 rounded-lg text-[#565E6C] hover:bg-[#F5F6FA] transition-colors">
-              <Bell className="size-[18px]" strokeWidth={1.8} />
-              <span
-                className="absolute top-1.5 right-1.5 size-2 rounded-full bg-[#EF3826]"
-                style={{ boxShadow: "0 0 0 2px white" }}
-              />
-            </button>
+            {/* Bell — inquiry notifications */}
+            <NotificationBell locale={locale} />
 
             {/* Divider */}
             <div className="w-px h-6 bg-[#F0F1F3] mx-1" />

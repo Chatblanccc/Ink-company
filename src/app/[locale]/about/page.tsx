@@ -7,6 +7,8 @@ import { FadeIn, FadeInGroup } from "@/components/fade-in";
 import { HeroPhotoCards } from "@/components/hero-photo-cards";
 import { getLocaleFromString } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/seo";
+import { getPrismaClient } from "@/lib/prisma";
+import { aboutPageDefaults } from "@/lib/about-page-defaults";
 
 type L = { zh: string; en: string };
 
@@ -147,6 +149,18 @@ export default async function AboutPage({
   const { locale } = await params;
   const c = getLocaleFromString(locale);
 
+  /* ── Fetch hero cards from DB ─────────────────────────────────── */
+  let heroCards = aboutPageDefaults.heroCards;
+  const prisma = getPrismaClient();
+  if (prisma) {
+    try {
+      const row = await prisma.aboutPageContent.findUnique({ where: { id: "about-page" } });
+      if (row && Array.isArray(row.heroCards) && (row.heroCards as unknown[]).length >= 2) {
+        heroCards = row.heroCards as typeof heroCards;
+      }
+    } catch { /* keep defaults */ }
+  }
+
   return (
     <main className="overflow-hidden min-h-screen">
 
@@ -180,7 +194,7 @@ export default async function AboutPage({
 
             {/* Right: staggered portrait cards — desktop only */}
             <FadeIn delay={0.15} className="hidden lg:block">
-              <HeroPhotoCards locale={c} />
+              <HeroPhotoCards locale={c} cards={heroCards} />
             </FadeIn>
 
             {/* Mobile: single hero image */}

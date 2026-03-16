@@ -50,20 +50,14 @@ export function SignInForm({ t }: Props) {
   }
 
   return (
-    <>
-      {/* Form section — gap 24px */}
-      <form
-        onSubmit={handleSubmit}
-        className="flex w-full flex-col items-end"
-        style={{ gap: 24 }}
-      >
-        {/* Account input */}
-        <div className="flex w-full flex-col items-start" style={{ gap: 8 }}>
-          <label
-            htmlFor="account"
-            className="text-[16px] leading-none tracking-[0.01em]"
-            style={{ color: "#0C1421" }}
-          >
+    <div className="flex w-full flex-col gap-6">
+
+      {/* Credentials form */}
+      <form onSubmit={handleSubmit} className="flex w-full flex-col gap-5">
+
+        {/* Account */}
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="account" className="text-[13px] font-medium text-[#374151]">
             {t.accountLabel}
           </label>
           <input
@@ -74,24 +68,23 @@ export function SignInForm({ t }: Props) {
             placeholder="Example@email.com"
             autoComplete="username"
             required
-            className="h-12 w-full rounded-xl border px-4 text-[16px] tracking-[0.01em] outline-none placeholder:tracking-[0.01em]"
-            style={{
-              background: "#F7FBFF",
-              borderColor: "#D4D7E3",
-              color: "#0C1421",
-            }}
+            className="h-10 w-full rounded-lg border border-[#D4D7E3] bg-[#F7FBFF] px-3.5 text-[14px] text-[#0C1421] outline-none transition-colors placeholder:text-[#9CA3AF] focus:border-[#4880FF] focus:bg-white focus:ring-2 focus:ring-[#4880FF]/20"
           />
         </div>
 
-        {/* Password input */}
-        <div className="flex w-full flex-col items-start" style={{ gap: 8 }}>
-          <label
-            htmlFor="password"
-            className="text-[16px] leading-none tracking-[0.01em]"
-            style={{ color: "#0C1421" }}
-          >
-            {t.passwordLabel}
-          </label>
+        {/* Password */}
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center justify-between">
+            <label htmlFor="password" className="text-[13px] font-medium text-[#374151]">
+              {t.passwordLabel}
+            </label>
+            <Link
+              href="mailto:admin@ink-company.com"
+              className="text-[12px] font-medium text-[#4880FF] hover:underline"
+            >
+              Forgot Password?
+            </Link>
+          </div>
           <input
             id="password"
             name="password"
@@ -100,61 +93,29 @@ export function SignInForm({ t }: Props) {
             placeholder="At least 8 characters"
             autoComplete="current-password"
             required
-            className="h-12 w-full rounded-xl border px-4 text-[16px] tracking-[0.01em] outline-none placeholder:tracking-[0.01em]"
-            style={{
-              background: "#F7FBFF",
-              borderColor: "#D4D7E3",
-              color: "#0C1421",
-            }}
+            className="h-10 w-full rounded-lg border border-[#D4D7E3] bg-[#F7FBFF] px-3.5 text-[14px] text-[#0C1421] outline-none transition-colors placeholder:text-[#9CA3AF] focus:border-[#4880FF] focus:bg-white focus:ring-2 focus:ring-[#4880FF]/20"
           />
         </div>
 
-        {/* Forgot Password */}
-        <Link
-          href="mailto:admin@ink-company.com"
-          className="text-[16px] leading-none tracking-[0.01em]"
-          style={{ color: "#1E4AE9" }}
-        >
-          Forgot Password?
-        </Link>
-
         {/* Error */}
-        {error ? (
-          <p className="w-full rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
+        {error && (
+          <p className="rounded-lg bg-red-50 px-3.5 py-2.5 text-[13px] text-red-600">
             {error}
           </p>
-        ) : null}
+        )}
 
-        {/* Sign in button */}
+        {/* Submit */}
         <button
           type="submit"
           disabled={loading}
-          className="group relative flex h-[52px] w-full items-center justify-center overflow-hidden rounded-xl text-[20px] leading-none tracking-[0.01em] text-white transition-all duration-200 hover:shadow-[0_8px_24px_rgba(22,45,58,0.35)] active:scale-[0.98] active:shadow-none disabled:cursor-not-allowed disabled:opacity-70"
-          style={{ background: "#162D3A" }}
+          className="group relative mt-1 flex h-10 w-full items-center justify-center overflow-hidden rounded-lg bg-[#162D3A] text-[14px] font-semibold leading-none tracking-wide text-white transition-all duration-200 hover:bg-[#1f3d50] hover:shadow-[0_6px_20px_rgba(22,45,58,0.30)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {/* Hover shimmer overlay */}
           <span className="pointer-events-none absolute inset-0 translate-x-[-100%] bg-white/10 skew-x-[-20deg] transition-transform duration-500 group-hover:translate-x-[200%]" />
           {loading ? (
             <span className="flex items-center gap-2">
-              <svg
-                className="h-4 w-4 animate-spin"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                />
+              <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
               </svg>
               {t.signingIn}
             </span>
@@ -164,92 +125,53 @@ export function SignInForm({ t }: Props) {
         </button>
       </form>
 
-      {/* Social sign-in section — gap 24px */}
-      <div className="flex w-full flex-col items-start" style={{ gap: 24 }}>
-        {/* Or divider */}
-        <div
-          className="flex w-full items-center justify-center"
-          style={{ gap: 16, padding: "10px 0" }}
-        >
-          <div className="h-px flex-1" style={{ background: "#CFDFE2" }} />
-          <span
-            className="text-[16px] leading-none tracking-[0.01em]"
-            style={{ color: "#294957" }}
-          >
-            Or
-          </span>
-          <div className="h-px flex-1" style={{ background: "#CFDFE2" }} />
-        </div>
-
-        {/* Social buttons — gap 16px */}
-        <div className="flex w-full flex-col" style={{ gap: 16 }}>
-          <button
-            type="button"
-            disabled
-            className="flex h-[52px] w-full items-center justify-center rounded-xl text-[16px] tracking-[0.01em] disabled:cursor-not-allowed disabled:opacity-60"
-            style={{ background: "#F3F9FA", color: "#313957", gap: 16 }}
-          >
-            <GoogleIcon />
-            Sign in with Google
-          </button>
-          <button
-            type="button"
-            disabled
-            className="flex h-[52px] w-full items-center justify-center rounded-xl text-[16px] tracking-[0.01em] disabled:cursor-not-allowed disabled:opacity-60"
-            style={{ background: "#F3F9FA", color: "#313957", gap: 16 }}
-          >
-            <FacebookIcon />
-            Sign in with Facebook
-          </button>
-        </div>
+      {/* Divider */}
+      <div className="flex items-center gap-3">
+        <div className="h-px flex-1 bg-[#E5E7EB]" />
+        <span className="text-[12px] text-[#9CA3AF]">Or</span>
+        <div className="h-px flex-1 bg-[#E5E7EB]" />
       </div>
 
-      {/* Don't have an account */}
-      <p
-        className="w-full text-center text-[18px] leading-[160%] tracking-[0.01em]"
-        style={{ color: "#313957" }}
-      >
-        Don&apos;t you have an account?{" "}
-        <span style={{ color: "#1E4AE9" }}>Sign up</span>
-      </p>
-    </>
+      {/* Social buttons */}
+      <div className="flex flex-col gap-3">
+        <button
+          type="button"
+          disabled
+          className="flex h-10 w-full items-center justify-center gap-3 rounded-lg border border-[#E5E7EB] bg-white text-[13px] font-medium text-[#374151] transition-colors hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <GoogleIcon />
+          Sign in with Google
+        </button>
+        <button
+          type="button"
+          disabled
+          className="flex h-10 w-full items-center justify-center gap-3 rounded-lg border border-[#E5E7EB] bg-white text-[13px] font-medium text-[#374151] transition-colors hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <FacebookIcon />
+          Sign in with Facebook
+        </button>
+      </div>
+
+    </div>
   );
 }
 
 function GoogleIcon() {
   return (
-    <svg viewBox="0 0 28 28" width="28" height="28" aria-hidden="true">
-      <path
-        d="M25.32 14.29c0-.9-.08-1.77-.23-2.6H14v4.92h6.34c-.27 1.42-1.1 2.62-2.34 3.43v2.85h3.78c2.21-2.04 3.54-5.04 3.54-8.6z"
-        fill="#4285F4"
-      />
-      <path
-        d="M14 26c3.16 0 5.81-1.05 7.78-2.85l-3.78-2.85c-1.05.7-2.4 1.12-4 1.12-3.08 0-5.69-2.08-6.62-4.88H3.48v2.94C5.44 23.38 9.48 26 14 26z"
-        fill="#34A853"
-      />
-      <path
-        d="M7.38 16.54c-.24-.7-.37-1.45-.37-2.22s.13-1.52.37-2.22V9.16H3.48A12 12 0 002 14.32c0 1.94.47 3.77 1.28 5.4l4.1-3.18z"
-        fill="#FBBC04"
-      />
-      <path
-        d="M14 7.44c1.74 0 3.3.6 4.52 1.77l3.38-3.38C19.8 3.92 17.16 2.64 14 2.64 9.48 2.64 5.44 5.26 3.48 9.16l3.9 3.02C8.3 9.38 10.92 7.44 14 7.44z"
-        fill="#EA4335"
-      />
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-.1 2.73.44 3.9l3.78-2.93c-.76-2.2-2.37-3.97-4.58-4.98z" fill="#4285F4" />
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05" />
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
     </svg>
   );
 }
 
 function FacebookIcon() {
   return (
-    <svg viewBox="0 0 28 28" width="28" height="28" aria-hidden="true">
-      <path
-        d="M28 14.084C28 6.305 21.732 0 14 0S0 6.305 0 14.084c0 7.027 5.122 12.854 11.813 13.916V18.15H8.258v-4.066h3.555v-3.1c0-3.525 2.092-5.472 5.293-5.472 1.534 0 3.139.275 3.139.275v3.46h-1.768c-1.742 0-2.284 1.084-2.284 2.195v2.642h3.883l-.621 4.066h-3.262v9.85C22.878 26.938 28 21.111 28 14.084z"
-        fill="#1877F2"
-      />
-      <path
-        d="M19.455 18.15l.62-4.066h-3.882V11.44c0-1.11.542-2.195 2.284-2.195h1.768V5.786s-1.605-.275-3.14-.275c-3.2 0-5.292 1.947-5.292 5.473v3.1H8.258v4.066h3.555v9.85a14.15 14.15 0 004.38 0V18.15h3.262z"
-        fill="#fff"
-      />
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+      <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.03 4.388 11.024 10.125 11.927v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.532-4.669 1.313 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796v8.437C19.612 23.097 24 18.103 24 12.073z" fill="#1877F2" />
+      <path d="M16.671 15.563l.532-3.49h-3.328v-2.25c0-.949.465-1.874 1.956-1.874h1.513V4.996s-1.373-.235-2.686-.235c-2.74 0-4.532 1.662-4.532 4.669v2.643H7.078v3.49h3.047v8.437a12.085 12.085 0 003.75 0v-8.437h2.796z" fill="#fff" />
     </svg>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition, useEffect, useRef } from "react";
 import { CheckCircle2, Loader2, Plus, Save, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -97,11 +97,15 @@ export function ProductsPageForm({ initial, locale }: Props) {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsScrolled(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    if (sentinelRef.current) observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
   }, []);
 
   function handleSave() {
@@ -125,6 +129,8 @@ export function ProductsPageForm({ initial, locale }: Props) {
 
   return (
     <div className="space-y-8">
+      {/* Sentinel: when this scrolls out of view the pill button appears */}
+      <div ref={sentinelRef} className="h-px" aria-hidden="true" />
       {/* Sticky save bar */}
       <div className="sticky top-[60px] z-10 flex">
         {/* Full bar (visible when not scrolled) */}

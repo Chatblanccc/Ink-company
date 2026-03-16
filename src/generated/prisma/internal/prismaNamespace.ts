@@ -391,6 +391,7 @@ export const ModelName = {
   ProductsPageContent: 'ProductsPageContent',
   Article: 'Article',
   HomepageContent: 'HomepageContent',
+  AboutPageContent: 'AboutPageContent',
   ArticleStats: 'ArticleStats',
   Inquiry: 'Inquiry'
 } as const
@@ -408,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "siteSetting" | "productCategory" | "product" | "productsPageContent" | "article" | "homepageContent" | "articleStats" | "inquiry"
+    modelProps: "user" | "siteSetting" | "productCategory" | "product" | "productsPageContent" | "article" | "homepageContent" | "aboutPageContent" | "articleStats" | "inquiry"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -930,6 +931,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AboutPageContent: {
+      payload: Prisma.$AboutPageContentPayload<ExtArgs>
+      fields: Prisma.AboutPageContentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AboutPageContentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AboutPageContentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AboutPageContentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AboutPageContentPayload>
+        }
+        findFirst: {
+          args: Prisma.AboutPageContentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AboutPageContentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AboutPageContentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AboutPageContentPayload>
+        }
+        findMany: {
+          args: Prisma.AboutPageContentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AboutPageContentPayload>[]
+        }
+        create: {
+          args: Prisma.AboutPageContentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AboutPageContentPayload>
+        }
+        createMany: {
+          args: Prisma.AboutPageContentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AboutPageContentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AboutPageContentPayload>[]
+        }
+        delete: {
+          args: Prisma.AboutPageContentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AboutPageContentPayload>
+        }
+        update: {
+          args: Prisma.AboutPageContentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AboutPageContentPayload>
+        }
+        deleteMany: {
+          args: Prisma.AboutPageContentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AboutPageContentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AboutPageContentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AboutPageContentPayload>[]
+        }
+        upsert: {
+          args: Prisma.AboutPageContentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AboutPageContentPayload>
+        }
+        aggregate: {
+          args: Prisma.AboutPageContentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAboutPageContent>
+        }
+        groupBy: {
+          args: Prisma.AboutPageContentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AboutPageContentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AboutPageContentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AboutPageContentCountAggregateOutputType> | number
+        }
+      }
+    }
     ArticleStats: {
       payload: Prisma.$ArticleStatsPayload<ExtArgs>
       fields: Prisma.ArticleStatsFieldRefs
@@ -1235,6 +1310,20 @@ export const HomepageContentScalarFieldEnum = {
 export type HomepageContentScalarFieldEnum = (typeof HomepageContentScalarFieldEnum)[keyof typeof HomepageContentScalarFieldEnum]
 
 
+export const AboutPageContentScalarFieldEnum = {
+  id: 'id',
+  hero: 'hero',
+  heroCards: 'heroCards',
+  stats: 'stats',
+  team: 'team',
+  values: 'values',
+  cta: 'cta',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AboutPageContentScalarFieldEnum = (typeof AboutPageContentScalarFieldEnum)[keyof typeof AboutPageContentScalarFieldEnum]
+
+
 export const ArticleStatsScalarFieldEnum = {
   id: 'id',
   articleSlug: 'articleSlug',
@@ -1537,6 +1626,7 @@ export type GlobalOmitConfig = {
   productsPageContent?: Prisma.ProductsPageContentOmit
   article?: Prisma.ArticleOmit
   homepageContent?: Prisma.HomepageContentOmit
+  aboutPageContent?: Prisma.AboutPageContentOmit
   articleStats?: Prisma.ArticleStatsOmit
   inquiry?: Prisma.InquiryOmit
 }

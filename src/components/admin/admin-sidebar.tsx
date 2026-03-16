@@ -7,6 +7,7 @@ import {
   FileText,
   Home,
   Images,
+  Info,
   LayoutTemplate,
   LogOut,
   Package2,
@@ -37,6 +38,7 @@ export function AdminSidebar({ locale, collapsed = false }: Props) {
   const pageLinks = [
     { href: "/admin/homepage",      label: t.navHomepage,     icon: Home },
     { href: "/admin/products-page", label: t.navProductsPage, icon: Images },
+    { href: "/admin/about-page",    label: t.navAboutPage,    icon: Info },
     { href: "/admin/cms",           label: t.navCms,          icon: LayoutTemplate },
     { href: "/admin/articles",      label: t.navArticles,     icon: FileText },
   ];
@@ -47,11 +49,10 @@ export function AdminSidebar({ locale, collapsed = false }: Props) {
 
   return (
     <aside
-      className="hidden xl:flex flex-col shrink-0 min-h-screen bg-white transition-all duration-300 ease-in-out"
+      className="hidden xl:flex flex-col shrink-0 h-full bg-white transition-all duration-300 ease-in-out overflow-y-auto"
       style={{
         width: collapsed ? "68px" : "220px",
         boxShadow: "2px 0 12px rgba(2,46,86,0.06)",
-        overflow: "hidden",
       }}
     >
       {/* ── Brand ──────────────────────────────────────────────── */}

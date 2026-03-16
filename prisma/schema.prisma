@@ -127,6 +127,17 @@ model HomepageContent {
   updatedAt   DateTime @updatedAt
 }
 
+model AboutPageContent {
+  id        String   @id @default("about-page")
+  hero      Json
+  heroCards Json     @default("[]")
+  stats     Json
+  team      Json
+  values    Json
+  cta       Json
+  updatedAt DateTime @updatedAt
+}
+
 model ArticleStats {
   id           String   @id @default(cuid())
   articleSlug  String   @unique
